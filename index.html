@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Map with Mapbox and Google Sheets Data</title>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.css" rel="stylesheet">
+  <style>
+    body { margin: 0; display: flex; }
+    #left-panel { width: 30%; padding: 20px; overflow-y: auto; border-right: 1px solid #ddd; }
+    #right-panel { width: 70%; }
+    #map { height: 100vh; width: 100%; }
+  </style>
+</head>
+<body>
+  <div id="left-panel">
+    <div id="info">Hover over a marker for details</div>
+  </div>
+  <div id="right-panel">
+    <div id="map"></div>
+  </div>
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
