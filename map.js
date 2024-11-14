@@ -43,7 +43,7 @@ function init() {
 		marker.getElement().addEventListener('mouseenter', () => {
 			document.getElementById('info').innerHTML = `
 				<h2>${name}</h2>
-				<p>Category: ${category}</p>
+				<img src="https://chomu0831.github.io/reitaku-photos/images/reitaku-${id}-1.jpg" alt="reitaku-${id}-1.jpg" width="100%">
 				<p>${description}</p>
 			`;
 		});
