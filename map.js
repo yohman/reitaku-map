@@ -35,9 +35,23 @@ function init() {
 		const markerColor = getCategoryColor(category);
 
 		// データに基づいてマーカーを追加
-		const marker = new mapboxgl.Marker({ color: markerColor })
-			.setLngLat([parseFloat(lon), parseFloat(lat)])
-			.addTo(map);
+		// カスタム画像のURLを指定
+const customIconUrl = `https://chomu0831.github.io/reitaku-photos/images/reitaku-${id}-1.jpg`; // 任意の画像URLに置き換え
+
+// カスタムマーカー用のHTML要素を作成
+const customMarker = document.createElement('div');
+customMarker.style.backgroundImage = `url(${customIconUrl})`;
+customMarker.style.width = '40px'; 
+customMarker.style.height = '40px'; 
+customMarker.style.backgroundSize = 'cover'; 
+customMarker.style.borderRadius = '50%'; 
+customMarker.style.cursor = 'pointer'; // ポインター表示
+
+// マーカーをマップに追加
+const marker = new mapboxgl.Marker({ element: customMarker })
+    .setLngLat([parseFloat(lon), parseFloat(lat)])
+    .addTo(map);
+
 
 		// ホバーイベントで左パネルを更新
 		marker.getElement().addEventListener('mouseenter', () => {
@@ -45,6 +59,8 @@ function init() {
 				<h2>${name}</h2>
 				<p>Category: ${category}</p>
 				<p>${description}</p>
+				<img src="https://chomu0831.github.io/reitaku-photos/images/reitaku-${id}-1.jpg"
+					style="width:350px;height:350px;object-fit:cover">
 			`;
 		});
 
