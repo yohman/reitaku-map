@@ -38,6 +38,10 @@ function init() {
 		// カスタム画像のURLを指定
 const customIconUrl = `https://chomu0831.github.io/reitaku-photos/images/reitaku-${id}-1.jpg`; // 任意の画像URLに置き換え
 
+// カテゴリから色を取得
+const borderColor = getCategoryColor(category);  // getCategoryColor関数を使って色を取得
+const borderWidth = '2px';
+
 // カスタムマーカー用のHTML要素を作成
 const customMarker = document.createElement('div');
 customMarker.style.backgroundImage = `url(${customIconUrl})`;
@@ -46,6 +50,9 @@ customMarker.style.height = '40px';
 customMarker.style.backgroundSize = 'cover'; 
 customMarker.style.borderRadius = '50%'; 
 customMarker.style.cursor = 'pointer'; // ポインター表示
+
+// 縁取りを追加
+customMarker.style.border = `${borderWidth} solid ${borderColor}`;
 
 // マーカーをマップに追加
 const marker = new mapboxgl.Marker({ element: customMarker })
@@ -77,7 +84,7 @@ function getCategoryColor(category) {
 		case 0: return '#FF5733';
 		case 1: return '#33FF57';
 		case 2: return '#3357FF';
-		case 3: return '#3357FF';
+		case 3: return '#FF33FF';
 		default: return '#888888';
 	}
 }
