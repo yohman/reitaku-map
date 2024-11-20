@@ -105,6 +105,6 @@ function getCategoryColor(category) {
         case 1: return '#33FF57'; // 緑系
         case 2: return '#3357FF'; // 青系
         case 3: return '#FF33FF'; // ピンク系
-        default: return '#888888'; // デフォルト（グレー）
+        default: return '#888888'; // デフォルト
     }
 }
