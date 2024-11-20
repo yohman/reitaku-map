@@ -35,6 +35,7 @@ function init() {
 		const markerColor = getCategoryColor(category);
 
 		// データに基づいてマーカーを追加
+
 		// カスタム画像のURLを指定
 const customIconUrl = `https://chomu0831.github.io/reitaku-photos/images/reitaku-${id}-1.jpg`; // 任意の画像URLに置き換え
 
@@ -108,6 +109,7 @@ rows.forEach(row => {
 
 // 初期メッセージを設定
 document.getElementById('info').innerHTML = 'アイコンをクリックまたはタップして詳細を表示';
+
 
 	});
 }
