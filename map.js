@@ -60,8 +60,8 @@ const marker = new mapboxgl.Marker({ element: customMarker })
     .addTo(map);
 
 
-		// ホバーイベントで左パネルを更新
-		marker.getElement().addEventListener('mouseenter', () => {
+		// クリックベントで左パネルを更新
+		marker.getElement().addEventListener('click', () => {
 			document.getElementById('info').innerHTML = `
 				<h2>${name}</h2>
 				<p>Category: ${category}</p>
@@ -71,10 +71,8 @@ const marker = new mapboxgl.Marker({ element: customMarker })
 			`;
 		});
 
-		// ホバーイベントで左パネルを更新
-		marker.getElement().addEventListener('mouseleave', () => {
-			document.getElementById('info').innerHTML = 'マーカーにホバーして詳細を表示';
-		});
+		// 初期メッセージを設定
+		document.getElementById('info').innerHTML = 'マーカーをクリックまたはタップして詳細を表示';
 	});
 }
 
