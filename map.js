@@ -9,7 +9,7 @@ function init() {
     let latSum = 0;
     let lonSum = 0;
     rows.forEach(row => {
-        const [id, category, name, englishName, lat, lon, japaneseDescription, englishDescription] = row;
+        const [id, category, name, englishName, lat, lon, japaneseDescription, englishDescription,link,hashutagu,linkname] = row;
         latSum += parseFloat(lat);
         lonSum += parseFloat(lon);
     });
@@ -19,8 +19,9 @@ function init() {
     // Mapboxマップを初期化
     const map = new mapboxgl.Map({
         container: 'map',
-        style: 'mapbox://styles/mapbox/streets-v11',
         center: [centerlon, centerlat],
+        style: 'mapbox://styles/mapbox/satellite-v9',
+        // style: 'mapbox://styles/mapbox/streets-v11',
         zoom: 15
     });
 
@@ -61,7 +62,7 @@ function init() {
     let lastClickedMarker = null; // 最後にクリックしたマーカーを追跡
 
     rows.forEach(row => {
-        const [id, category, name, englishName, lat, lon, japaneseDescription, englishDescription] = row;
+        const [id, category, name, englishName, lat, lon, japaneseDescription, englishDescription,link,hashutagu,linkname] = row;
         const customIconUrl = `https://chomu0831.github.io/reitaku-photos/images/reitaku-${id}-1.jpg`;
 
         // カスタムマーカー用のHTML要素を作成
@@ -89,7 +90,9 @@ function init() {
                 document.getElementById('info').innerHTML = `
                     <h2>${name}</h2>
                     <p>${description}</p>
-                    <img src="${customIconUrl}" style="width:350px;height:350px;object-fit:cover">
+                    <img src="${customIconUrl}" style="width:350px;height:350px;object-fit:cover"><br>
+                    <a href="${link}">${linkname}</a>
+                    <a href="${hashutagu}">${hashutagu}</a>
                 `;
                 lastClickedMarker = marker;
             }
