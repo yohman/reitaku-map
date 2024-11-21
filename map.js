@@ -88,7 +88,6 @@ function init() {
                 const description = currentLanguage === 'japanese' ? japaneseDescription : englishDescription;
                 document.getElementById('info').innerHTML = `
                     <h2>${name}</h2>
-                    <p>Category: ${category}</p>
                     <p>${description}</p>
                     <img src="${customIconUrl}" style="width:350px;height:350px;object-fit:cover">
                 `;
