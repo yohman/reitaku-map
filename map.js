@@ -52,7 +52,6 @@ function init() {
 
     // 初期メッセージを設定
     document.getElementById('info').innerHTML = '言語の選択とアイコンをクリックまたはタップして詳細を表示';
-        // 特定の要素を取得
         const element = document.getElementById('info');
 
         // 要素の位置を少し下げる
