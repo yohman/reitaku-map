@@ -20,10 +20,17 @@ function init() {
     const map = new mapboxgl.Map({
         container: 'map',
         center: [centerlon, centerlat],
-        style: 'mapbox://styles/mapbox/satellite-v9',
-        // style: 'mapbox://styles/mapbox/streets-v11',
+        //style: 'mapbox://styles/mapbox/satellite-v9',
+         style: 'mapbox://styles/mapbox/streets-v11',
         zoom: 15
     });
+    document.getElementById('normal-map-btn').addEventListener('click', function() {
+        map.setStyle('mapbox://styles/mapbox/streets-v11');
+      });
+
+      document.getElementById('satellite-map-btn').addEventListener('click', function() {
+        map.setStyle('mapbox://styles/mapbox/satellite-v9');
+      });
 
     // 言語切り替え設定
     let currentLanguage = 'japanese'; // 初期言語
@@ -61,12 +68,17 @@ function init() {
     let lastClickedMarker = null; // 最後にクリックしたマーカーを追跡
 
     rows.forEach(row => {
-        const [id, category, name, englishName, lat, lon, japaneseDescription, englishDescription,link,hashutagu,linkname] = row;
-        const customIconUrl = `https://chomu0831.github.io/reitaku-photos/images/reitaku-${id}-1.jpg`;
+        const [id, category, jName, eName, lat, lon, jDescription, eDescription,link,hashutagu,linkname,numphotos] = row;
+        
+        var photos = ''; // Object to store dynamically created variables
+
+		for (let i = 1; i <= numphotos; i++) {
+			photos+=`<img src="https://chomu0831.github.io/reitaku-photos/images/reitaku-${id}-${i}.jpg" style="width:350px;height:350px;object-fit:cover"><br><br>`;
+		}
 
         // カスタムマーカー用のHTML要素を作成
         const customMarker = document.createElement('div');
-        customMarker.style.backgroundImage = `url(${customIconUrl})`;
+        customMarker.style.backgroundImage = `url(https://chomu0831.github.io/reitaku-photos/images/reitaku-${id}-1.jpg)`;
         customMarker.style.width = '40px';
         customMarker.style.height = '40px';
         customMarker.style.backgroundSize = 'cover';
@@ -85,11 +97,12 @@ function init() {
                 document.getElementById('info').innerHTML = '言語を選択とマーカーをクリックまたはタップして詳細を表示';
                 lastClickedMarker = null;
             } else {
-                const description = currentLanguage === 'japanese' ? japaneseDescription : englishDescription;
+                const description = currentLanguage === 'japanese' ? jDescription : eDescription;
+                const name = currentLanguage === 'japanese' ? jName : eName;
                 document.getElementById('info').innerHTML = `
                     <h2>${name}</h2>
                     <p>${description}</p>
-                    <img src="${customIconUrl}" style="width:350px;height:350px;object-fit:cover"><br>
+                    ${photos}
                     <a href="${link}">${linkname}</a>
                     <a href="${hashutagu}">${hashutagu}</a>
                 `;
