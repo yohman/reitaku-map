@@ -11,6 +11,7 @@
     #right-panel { width: 70%; }
     #map { height: 100vh; width: 100%; }
     #map-style { position: absolute; top: 10px; right: 10px; z-index: 1; }
+    #marker-filter { position: absolute; top: 5px; right: 110px; z-index: 1; }
   </style>
 </head>
 <body>
@@ -23,6 +24,15 @@
   <div id="map-style">
     <button id="normal-map-btn">Normal Map</button>
     <button id="satellite-map-btn">Satellite Map</button>
+  </div>
+  <div id="marker-filter">
+    <select id="marker-filter">
+        <option value="all">All</option>
+        <option value="0">category0</option>
+        <option value="1">category1</option>
+        <option value="2">category2</option>
+        <option value="3">category3</option>
+    </select>
   </div>
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.js"></script>
   <script src="map.js"></script>
