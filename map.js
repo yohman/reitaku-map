@@ -103,7 +103,7 @@ function init() {
                     <h2>${name}</h2>
                     <p>${description}</p>
                     ${photos}
-                    <a href="${link}">${linkname}</a>
+                    <a href="${link}" target="_blank">${linkname}</a>
                     <a href="${hashutagu}">${hashutagu}</a>
                 `;
                 lastClickedMarker = marker;
