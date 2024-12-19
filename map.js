@@ -1,4 +1,31 @@
 function init() {
+    
+    // ...existing code...
+    let slideIndex = 1;
+    showSlides(slideIndex);
+
+    function plusSlides(n) {
+        showSlides(slideIndex += n);
+    }
+
+    function showSlides(n) {
+        let i;
+        let slides = document.getElementsByClassName("mySlides");
+        if (slides.length === 0) return; // スライドが存在しない場合は処理をスキップ
+        if (n > slides.length) {slideIndex = 1}
+        if (n < 1) {slideIndex = slides.length}
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";  
+        }
+        slides[slideIndex-1].style.display = "block";  
+    }
+
+    setInterval(() => {
+        plusSlides(1);
+    }, 3000); // 3秒ごとにスライドを変更
+    // ...existing code...
+    
+    
     // Mapboxのアクセストークン
     mapboxgl.accessToken = 'pk.eyJ1IjoieW9oamFwYW4iLCJhIjoiY2xnYnRoOGVmMDFsbTNtbzR0eXV6a2IwZCJ9.kJYURwlqIx_cpXvi66N0uw';
 
@@ -8,14 +35,22 @@ function init() {
     // すべてのマーカーの平均緯度と経度を計算
     let latSum = 0;
     let lonSum = 0;
+    // lat,lonがある行のみを対象にする
     rows.forEach(row => {
-        const [id, category, name, englishName, lat, lon, japaneseDescription, englishDescription,link,hashutagu,linkname] = row;
-        latSum += parseFloat(lat);
-        lonSum += parseFloat(lon);
+        
+        const [id, category, name, englishName, lat, lon, japaneseDescription, englishDescription, link, hashutagu, linkname,numphotos] = row;
+        if (!lat || !lon) return;
+        if (lat && lon) { // lat, lonが存在する場合のみ加算
+            latSum += parseFloat(lat);
+            lonSum += parseFloat(lon);
+        }
     });
+
+    // 中心座標を計算
     const centerlat = latSum / rows.length;
     const centerlon = lonSum / rows.length;
 
+    console.log(centerlat, centerlon);
     // Mapboxマップを初期化
     const map = new mapboxgl.Map({
         container: 'map',
@@ -70,21 +105,29 @@ function init() {
     rows.forEach(row => {
         const [id, category, jName, eName, lat, lon, jDescription, eDescription,link,hashutagu,linkname,numphotos] = row;
         
-        var photos = ''; // Object to store dynamically created variables
+        var rphotos = ''; // Object to store dynamically created variables
 
 		for (let i = 1; i <= numphotos; i++) {
-			photos+=`<img src="https://chomu0831.github.io/reitaku-photos/images/reitaku-${id}-${i}.jpg" style="width:350px;height:350px;object-fit:cover"><br><br>`;
+			rphotos+=`<div class="mySlides fade"><img src="https://chomu0831.github.io/reitaku-photos/images/reitaku-${id}-${i}.jpg" style="width:350px;height:350px;object-fit:cover"></div> `;
 		}
 
+        // console.log(rphotos);
         // カスタムマーカー用のHTML要素を作成
         const customMarker = document.createElement('div');
-        customMarker.style.backgroundImage = `url(https://chomu0831.github.io/reitaku-photos/images/reitaku-${id}-1.jpg)`;
+        if (id >= 104 && id <= 112) {
+            customMarker.style.backgroundImage = `url(https://chomu0831.github.io/reitaku-photos/images/reitaku-ex.jpg)`;
+        } 
+        else {
+            customMarker.style.backgroundImage = `url(https://chomu0831.github.io/reitaku-photos/images/reitaku-${id}-1.jpg)`;
+        }
+        // customMarker.style.backgroundImage = `url(https://chomu0831.github.io/reitaku-photos/images/reitaku-${id}-1.jpg)`;
         customMarker.style.width = '40px';
         customMarker.style.height = '40px';
         customMarker.style.backgroundSize = 'cover';
         customMarker.style.borderRadius = '50%';
         customMarker.style.cursor = 'pointer';
         customMarker.style.border = `2px solid ${getCategoryColor(category)}`;
+        customMarker.style.border = `0 0 0 2px white, 0 0 0 4px ${getCategoryColor(category)}`;
 
         // マーカーをマップに追加
         const marker = new mapboxgl.Marker({ element: customMarker })
@@ -102,7 +145,11 @@ function init() {
                 document.getElementById('info').innerHTML = `
                     <h2>${name}</h2>
                     <p>${description}</p>
-                    ${photos}
+                    <div class="slideshow-container">
+                        ${rphotos}
+                        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                        <a class="next" onclick="plusSlides(1)">&#10095;</a>
+                     </div>
                     <a href="${link}" target="_blank">${linkname}</a>
                     <a href="${hashutagu}">${hashutagu}</a>
                 `;
@@ -115,10 +162,12 @@ function init() {
 // カテゴリごとに色を取得するヘルパー関数
 function getCategoryColor(category) {
     switch (parseInt(category)) {
-        case 0: return '#FF5733'; // 赤系
+        case 0: return '#FFFF33'; // 黄色系
         case 1: return '#33FF57'; // 緑系
         case 2: return '#3357FF'; // 青系
         case 3: return '#FF33FF'; // ピンク系
-        default: return '#888888'; // デフォルト
+        case 4: return '#FF5733'; // オレンジ系
+        case 5: return '#33FFFF'; // シアン系
+        default: return '#ffffff'; // 白系
     }
 }
