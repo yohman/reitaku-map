@@ -2,10 +2,12 @@ function init() {
     
     // ...existing code...
     let slideIndex = 1;
-    showSlides(slideIndex);
+    let slideInterval;
+    // showSlides(slideIndex);
 
     function plusSlides(n) {
         showSlides(slideIndex += n);
+        resetSlideInterval();
     }
 
     function showSlides(n) {
@@ -20,9 +22,25 @@ function init() {
         slides[slideIndex-1].style.display = "block";  
     }
 
-    setInterval(() => {
-        plusSlides(1);
-    }, 3000); // 3秒ごとにスライドを変更
+    function resetSlideInterval() {
+        clearInterval(slideInterval);
+        slideInterval = setInterval(() => {
+            plusSlides(1);
+        }, 3000); // 3秒ごとにスライドを変更
+    }
+
+    // 初期スライド表示とインターバル設定
+    showSlides(slideIndex);
+    resetSlideInterval();
+    
+    // 矢印ボタンのクリックイベントを設定
+    document.addEventListener('click', (event) => {
+        if (event.target.matches('.prev')) {
+            plusSlides(-1);
+        } else if (event.target.matches('.next')) {
+            plusSlides(1);
+        }
+    });
     // ...existing code...
     
     
