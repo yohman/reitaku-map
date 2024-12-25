@@ -133,13 +133,15 @@ function init() {
         const customMarker = document.createElement('div');
         if (id >= 104 && id <= 112) {
             customMarker.style.backgroundImage = `url(https://chomu0831.github.io/reitaku-photos/images/reitaku-ex.jpg)`;
+            customMarker.style.width = '30px';
+            customMarker.style.height = '30px';
         } 
         else {
             customMarker.style.backgroundImage = `url(https://chomu0831.github.io/reitaku-photos/images/reitaku-${id}-1.jpg)`;
+            customMarker.style.width = '40px';
+            customMarker.style.height = '40px';
         }
         // customMarker.style.backgroundImage = `url(https://chomu0831.github.io/reitaku-photos/images/reitaku-${id}-1.jpg)`;
-        customMarker.style.width = '40px';
-        customMarker.style.height = '40px';
         customMarker.style.backgroundSize = 'cover';
         customMarker.style.borderRadius = '50%';
         customMarker.style.cursor = 'pointer';
