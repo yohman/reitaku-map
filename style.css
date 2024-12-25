@@ -6,11 +6,12 @@
 #marker-filter { position: absolute; top: 5px; right: 110px; z-index: 1; } */
 
 body { margin: 0; display: flex; flex-direction: column; }
-#left-panel { width: 30%; padding: 20px; overflow-y: auto; border-right: 1px solid #ddd; height: 100vh; }
+#left-panel { width: 30%; padding: 20px; overflow-y: auto; border-right: 1px solid #ddd; height: auto; }
 #right-panel { width: 70%; }
 #map { height: 100vh; width: 100%; }
 #map-style { position: absolute; top: 10px; right: 10px; z-index: 1; }
 #marker-filter { position: absolute; top: 5px; right: 110px; z-index: 1; }
+#left-panel { display: flex; justify-content: center; align-items: center; }
 
 .slideshow-container {
     position: relative;
@@ -27,7 +28,7 @@ body { margin: 0; display: flex; flex-direction: column; }
 /* PC用レイアウト */
 @media (min-width: 768px) {
     body { flex-direction: row; }
-    #left-panel { width: 30%; height: 100vh; }
+    #left-panel { width: 30%; height: auto; }
     #right-panel { width: 70%; }
 }
 
@@ -74,8 +75,13 @@ aku-map/style.css */
     user-select: none;
 }
 
+.prev {
+    left: 0;
+    border-radius: 3px 0 0 3px;
+}
+
 .next {
-    right: 0;
+    right: 22px;
     border-radius: 3px 0 0 3px;
 }
 

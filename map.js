@@ -85,14 +85,15 @@ function init() {
         map.setStyle('mapbox://styles/mapbox/satellite-v9');
       });
 
+    let lastClickedMarker = null; // 最後にクリックしたマーカーを追跡
     // 言語切り替え設定
-    let currentLanguage = 'japanese'; // 初期言語
-    function setLanguage(language) {
-        currentLanguage = language;
-        if (lastClickedMarker) {
-            lastClickedMarker.getElement().click(); // 最後にクリックしたマーカーを再クリックして更新
-        }
-    }
+     let currentLanguage = 'japanese'; // 初期言語
+     function setLanguage(language) {
+         currentLanguage = language;
+         if (lastClickedMarker) {
+             lastClickedMarker.getElement().click(); // 最後にクリックしたマーカーを再クリックして更新
+         }
+     }
 
     // 言語切り替えボタンを動的に追加
     const buttonContainer = document.createElement('div');
@@ -111,15 +112,13 @@ function init() {
     document.getElementById('english-button').addEventListener('click', () => setLanguage('english'));
 
     // 初期メッセージを設定
-    document.getElementById('info').innerHTML = '言語の選択とアイコンをクリックまたはタップして詳細を表示';
-        const element = document.getElementById('info');
+     document.getElementById('info').innerHTML = '言語の選択とアイコンをクリックまたはタップして詳細を表示';
+         const element = document.getElementById('info');
 
         // 要素の位置を少し下げる
         element.style.marginTop = '20px';  // 20px 下げる
 
     // マーカーをマップに追加
-    let lastClickedMarker = null; // 最後にクリックしたマーカーを追跡
-
     rows.forEach(row => {
         const [id, category, jName, eName, lat, lon, jDescription, eDescription,link,hashutagu,linkname,numphotos] = row;
         
