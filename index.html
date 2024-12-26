@@ -18,9 +18,9 @@
     <button id="normal-map-btn">Normal Map</button>
     <button id="satellite-map-btn">Satellite Map</button>
   </div>
-  <div id="marker-filter">
+  <button id="marker-filter-dropdown">
     <select id="marker-filter">
-        <option value="0,1,2,3">All</option>
+        <option value="-1">All</option>
         <option value="0">university</option>
         <option value="1">middle & high school</option>
         <option value="2">sports facility</option>
@@ -28,7 +28,7 @@
         <option value="4">AED</option>
         <option value="5">barrier-free</option>
     </select>
-  </div>
+  </button>
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.js"></script>
   <script src="map.js"></script>
   <script src="getdata.js"></script>
