@@ -9,7 +9,7 @@ body { margin: 0; display: flex; flex-direction: column; }
 #left-panel { width: 30%; padding: 20px; overflow-y: auto; border-right: 1px solid #ddd; height: auto; }
 #right-panel { width: 70%; }
 #map { height: 100vh; width: 100%; }
-#map-style { position: absolute; top: 10px; right: 10px; z-index: 1; }
+#map-style { position: absolute; top: 9px; right: 10px; z-index: 1; }
 #marker-filter-dropdown { position: absolute; top: 9px; right: 265px; z-index: 1; }
 #left-panel { display: flex; justify-content: center; align-items: center; }
 
@@ -28,7 +28,7 @@ body { margin: 0; display: flex; flex-direction: column; }
 button {
     background-color: #f1f1f1;
     color: black;
-    padding: 10px 20px;
+    padding: 5px 10px;
     margin: 5px;
     cursor: pointer;
     border: none;
@@ -49,9 +49,11 @@ button:hover {
 
 /* スマートフォン用レイアウト */
 @media (max-width: 767px) {
-    #left-panel { width: 100%; height: 50vh; border-right: none; border-top: 1px solid #ddd; }
-    #right-panel { width: 100%; height: 50vh; }
+    #left-panel { width: 90%; height: auto ; border-right: none; border-top: 1px solid #ddd; order: 2; }
+    #right-panel { width: 100%; height: 50vh; order: 1; }
     #map { height: 50vh; }
+    #map-style { right: 10px; z-index: 1; }
+    #marker-filter-dropdown { right: 265px; z-index: 1; }
 }
 
 aku-map/style.css */
