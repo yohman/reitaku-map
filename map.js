@@ -73,6 +73,27 @@ function init() {
     `;
     document.body.appendChild(buttonContainer);
 
+    function updatePositions() {
+        const leftPanel = document.getElementById('left-panel');
+        const mapStyle = document.getElementById('map-style');
+        const markerFilterDropdown = document.getElementById('marker-filter-dropdown');
+    
+        if (window.innerWidth <= 767) {
+            const leftPanelTop = leftPanel.getBoundingClientRect().top;
+            mapStyle.style.top = `${leftPanelTop}px`;
+            markerFilterDropdown.style.top = `${leftPanelTop}px`;
+        } else {
+            mapStyle.style.top = '10px';
+            markerFilterDropdown.style.top = '9px';
+        }
+    }
+    
+    // 初期設定
+    updatePositions();
+    
+    // ウィンドウのリサイズ時に実行
+    window.addEventListener('resize', updatePositions);
+
     // ボタンクリックイベントを登録
     document.getElementById('japanese-button').addEventListener('click', () => setLanguage('japanese'));
     document.getElementById('english-button').addEventListener('click', () => setLanguage('english'));
