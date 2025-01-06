@@ -41,16 +41,8 @@ function init() {
             plusSlides(1);
         }
     });
-    // ...existing code...
     
-    document.getElementById('normal-map-btn').addEventListener('click', function() {
-        map.setStyle('mapbox://styles/mapbox/streets-v11');
-      });
-
-      document.getElementById('satellite-map-btn').addEventListener('click', function() {
-        map.setStyle('mapbox://styles/mapbox/satellite-v9');
-      });
-
+    // ...existing code...
     let lastClickedMarker = null; // 最後にクリックしたマーカーを追跡
     // 言語切り替え設定
      let currentLanguage = 'japanese'; // 初期言語
@@ -168,6 +160,13 @@ function init() {
             //style: 'mapbox://styles/mapbox/satellite-v9',
             style: 'mapbox://styles/mapbox/streets-v11',
             zoom: 15
+        });
+        document.getElementById('normal-map-btn').addEventListener('click', () => {
+            map.setStyle('mapbox://styles/mapbox/streets-v11');
+        });
+        
+        document.getElementById('satellite-map-btn').addEventListener('click', () => {
+            map.setStyle('mapbox://styles/mapbox/satellite-v9');
         });
         // マーカーをマップに追加
         rows.forEach(row => {
