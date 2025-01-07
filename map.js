@@ -137,7 +137,7 @@ function init() {
         // lat,lonがある行のみを対象にする
         latSum = 0;
         lonSum = 0;
-        rows.forEach(row => {
+        rows.forEach((row, index) => {
             
             const [id, category, name, englishName, lat, lon, japaneseDescription, englishDescription, link, hashutagu, linkname,numphotos] = row;
             if (!lat || !lon) return;
@@ -169,7 +169,7 @@ function init() {
             map.setStyle('mapbox://styles/mapbox/satellite-v9');
         });
         // マーカーをマップに追加
-        rows.forEach(row => {
+        rows.forEach((row, index) => {
             const [id, category, jName, eName, lat, lon, jDescription, eDescription,link,hashutagu,linkname,numphotos] = row;
             
             var rphotos = ''; // Object to store dynamically created variables
@@ -185,11 +185,19 @@ function init() {
                 customMarker.style.backgroundImage = `url(https://chomu0831.github.io/reitaku-photos/images/reitaku-ex.jpg)`;
                 customMarker.style.width = '25px';
                 customMarker.style.height = '25px';
+                customMarker.style.zIndex = index;
             } 
+            else if (id == 2) {
+                customMarker.style.backgroundImage = `url(https://chomu0831.github.io/reitaku-photos/images/reitaku-2-1.jpg)`;
+                customMarker.style.width = '40px';
+                customMarker.style.height = '40px';
+                customMarker.style.zIndex = '1000';
+            }
             else {
                 customMarker.style.backgroundImage = `url(https://chomu0831.github.io/reitaku-photos/images/reitaku-${id}-1.jpg)`;
                 customMarker.style.width = '40px';
                 customMarker.style.height = '40px';
+                customMarker.style.zIndex = index;
             }
             // customMarker.style.backgroundImage = `url(https://chomu0831.github.io/reitaku-photos/images/reitaku-${id}-1.jpg)`;
             customMarker.style.backgroundSize = 'cover';
