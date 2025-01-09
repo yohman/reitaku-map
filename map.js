@@ -111,7 +111,7 @@ function init() {
 
     // データを取得
     let rows = data.main.values;
-
+    let markers = [];
     initMap();
 
     // filter rows based on marker-filter dropdown
@@ -126,14 +126,18 @@ function init() {
             console.log('filtered');
             rows = data.main.values.filter(row => parseInt(row[1]) === category);
         }
+        
         initMap();
     });
 
     console.log(rows);
 
-
     function initMap() {
+        console.log('initMap');
         console.log(rows)
+        // 既存のマーカーを削除
+        markers.forEach(marker => marker.remove());
+        markers = [];
         // lat,lonがある行のみを対象にする
         latSum = 0;
         lonSum = 0;
@@ -161,13 +165,151 @@ function init() {
             style: 'mapbox://styles/mapbox/streets-v11',
             zoom: 15
         });
-        document.getElementById('normal-map-btn').addEventListener('click', () => {
-            map.setStyle('mapbox://styles/mapbox/streets-v11');
-        });
+        // document.getElementById('normal-map-btn').addEventListener('click', () => {
+        //     map.setStyle('mapbox://styles/mapbox/streets-v11');
+        // });
         
-        document.getElementById('satellite-map-btn').addEventListener('click', () => {
-            map.setStyle('mapbox://styles/mapbox/satellite-v9');
+        // document.getElementById('satellite-map-btn').addEventListener('click', () => {
+        //     map.setStyle('mapbox://styles/mapbox/satellite-v9');
+        // });
+
+        const mapDropdown = document.getElementById('map-style-dropdown');
+        mapDropdown.addEventListener('change', () => {
+            const year = mapDropdown.value;
+            let style;
+
+            switch (year) {
+                case 'normal':
+                    style = 'mapbox://styles/mapbox/streets-v11';
+                    break;
+                case '2023':
+                    style = 'mapbox://styles/mapbox/satellite-v9';
+                    break;
+
+                case '1974':
+                    style = {
+                    "version": 8,
+                    "sources": {
+                        "gsi": {
+                        "type": "raster",
+                        "tiles": [
+                            "https://cyberjapandata.gsi.go.jp/xyz/gazo1/{z}/{x}/{y}.jpg"
+                        ],
+                        "tileSize": 256
+                        }
+                    },
+                    "layers": [
+                        {
+                        "id": "gsi-layer",
+                        "type": "raster",
+                        "source": "gsi",
+                        "minzoom": 0,
+                        "maxzoom": 18
+                        }
+                    ]
+                    };
+                    break;
+                case '1961':
+                    style = {
+                    "version": 8,
+                    "sources": {
+                        "gsi": {
+                        "type": "raster",
+                        "tiles": [
+                            "https://cyberjapandata.gsi.go.jp/xyz/ort_old10/{z}/{x}/{y}.png"
+                        ],
+                        "tileSize": 256
+                        }
+                    },
+                    "layers": [
+                        {
+                        "id": "gsi-layer",
+                        "type": "raster",
+                        "source": "gsi",
+                        "minzoom": 0,
+                        "maxzoom": 18
+                        }
+                    ]
+                    };
+                    break;
+                case '1979':
+                    style = {
+                    "version": 8,
+                    "sources": {
+                        "gsi": {
+                        "type": "raster",
+                        "tiles": [
+                            "https://cyberjapandata.gsi.go.jp/xyz/gazo2/{z}/{x}/{y}.jpg"
+                        ],
+                        "tileSize": 256
+                        }
+                    },
+                    "layers": [
+                        {
+                        "id": "gsi-layer",
+                        "type": "raster",
+                        "source": "gsi",
+                        "minzoom": 0,
+                        "maxzoom": 18
+                        }
+                    ]
+                    };
+                    break;
+                case '1984':
+                    style = {
+                    "version": 8,
+                    "sources": {
+                        "gsi": {
+                        "type": "raster",
+                        "tiles": [
+                            "https://cyberjapandata.gsi.go.jp/xyz/gazo3/{z}/{x}/{y}.jpg"
+                        ],
+                        "tileSize": 256
+                        }
+                    },
+                    "layers": [
+                        {
+                        "id": "gsi-layer",
+                        "type": "raster",
+                        "source": "gsi",
+                        "minzoom": 0,
+                        "maxzoom": 18
+                        }
+                    ]
+                    };
+                    break;
+                case '1987':
+                    style = {
+                    "version": 8,
+                    "sources": {
+                        "gsi": {
+                        "type": "raster",
+                        "tiles": [
+                            "https://cyberjapandata.gsi.go.jp/xyz/gazo4/{z}/{x}/{y}.jpg"
+                        ],
+                        "tileSize": 256
+                        }
+                    },
+                    "layers": [
+                        {
+                        "id": "gsi-layer",
+                        "type": "raster",
+                        "source": "gsi",
+                        "minzoom": 0,
+                        "maxzoom": 18
+                        }
+                    ]
+                    };
+                    break;
+                default:
+                    style = 'mapbox://styles/mapbox/streets-v11';
+            }
+
+            map.setStyle(style);
         });
+
+        
+
         // マーカーをマップに追加
         rows.forEach((row, index) => {
             const [id, category, jName, eName, lat, lon, jDescription, eDescription,link,hashutagu,linkname,numphotos] = row;
@@ -211,6 +353,7 @@ function init() {
                 .setLngLat([parseFloat(lon), parseFloat(lat)])
                 .addTo(map);
 
+            markers.push(marker);
             // Add hover title tooltip
             customMarker.title = currentLanguage === 'japanese' ? jName : eName;
 
