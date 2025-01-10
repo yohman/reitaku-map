@@ -301,6 +301,98 @@ function init() {
                     ]
                     };
                     break;
+                case '2008':
+                    style = {
+                    "version": 8,
+                    "sources": {
+                        "gsi": {
+                        "type": "raster",
+                        "tiles": [
+                            "https://maps.gsi.go.jp/xyz/nendophoto2008/%7Bz%7D/%7Bx%7D/%7By%7D.png"
+                        ],
+                        "tileSize": 256
+                        }
+                    },
+                    "layers": [
+                        {
+                        "id": "gsi-layer",
+                        "type": "raster",
+                        "source": "gsi",
+                        "minzoom": 0,
+                        "maxzoom": 18
+                        }
+                    ]
+                    };
+                    break;
+                case '2012':
+                    style = {
+                    "version": 8,
+                    "sources": {
+                        "gsi": {
+                        "type": "raster",
+                        "tiles": [
+                            "https://maps.gsi.go.jp/xyz/nendophoto2012/%7Bz%7D/%7Bx%7D/%7By%7D.png"
+                        ],
+                        "tileSize": 256
+                        }
+                    },
+                    "layers": [
+                        {
+                        "id": "gsi-layer",
+                        "type": "raster",
+                        "source": "gsi",
+                        "minzoom": 0,
+                        "maxzoom": 18
+                        }
+                    ]
+                    };
+                    break;
+                case '2014':
+                    style = {
+                    "version": 8,
+                    "sources": {
+                        "gsi": {
+                        "type": "raster",
+                        "tiles": [
+                            "https://maps.gsi.go.jp/xyz/nendophoto2014/%7Bz%7D/%7Bx%7D/%7By%7D.png"
+                        ],
+                        "tileSize": 256
+                        }
+                    },
+                    "layers": [
+                        {
+                        "id": "gsi-layer",
+                        "type": "raster",
+                        "source": "gsi",
+                        "minzoom": 0,
+                        "maxzoom": 18
+                        }
+                    ]
+                    };
+                    break;
+                case '2019':
+                    style = {
+                    "version": 8,
+                    "sources": {
+                        "gsi": {
+                        "type": "raster",
+                        "tiles": [
+                            "https://maps.gsi.go.jp/xyz/nendophoto2019/%7Bz%7D/%7Bx%7D/%7By%7D.png"
+                        ],
+                        "tileSize": 256
+                        }
+                    },
+                    "layers": [
+                        {
+                        "id": "gsi-layer",
+                        "type": "raster",
+                        "source": "gsi",
+                        "minzoom": 0,
+                        "maxzoom": 18
+                        }
+                    ]
+                    };
+                    break;
                 default:
                     style = 'mapbox://styles/mapbox/streets-v11';
             }
@@ -324,13 +416,19 @@ function init() {
             // カスタムマーカー用のHTML要素を作成
             const customMarker = document.createElement('div');
             if (category == 4) {
-                customMarker.style.backgroundImage = `url(https://chomu0831.github.io/reitaku-photos/images/reitaku-ex.jpg)`;
+                customMarker.style.backgroundImage = `url(https://chomu0831.github.io/reitaku-photos/images/reitaku-ex-1.jpg)`;
                 customMarker.style.width = '25px';
                 customMarker.style.height = '25px';
                 customMarker.style.zIndex = index;
             } 
-            else if (id == 2) {
-                customMarker.style.backgroundImage = `url(https://chomu0831.github.io/reitaku-photos/images/reitaku-2-1.jpg)`;
+            else if (category == 5){
+                customMarker.style.backgroundImage = `url(https://chomu0831.github.io/reitaku-photos/images/reitaku-ex-2.jpg)`;
+                customMarker.style.width = '25px';
+                customMarker.style.height = '25px';
+                customMarker.style.zIndex = index;
+            }
+            else if (category == 0) {
+                customMarker.style.backgroundImage = `url(https://chomu0831.github.io/reitaku-photos/images/reitaku-${id}-1.jpg)`;
                 customMarker.style.width = '40px';
                 customMarker.style.height = '40px';
                 customMarker.style.zIndex = '1000';
