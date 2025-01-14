@@ -1,6 +1,5 @@
 function init() {
-    
-    // ...existing code...
+
     let slideIndex = 1;
     let slideInterval;
     // showSlides(slideIndex);
@@ -58,7 +57,7 @@ function init() {
     buttonContainer.style.position = 'absolute';
     buttonContainer.style.top = '10px';
     buttonContainer.style.left = '10px';
-    buttonContainer.style.zIndex = '1';
+    buttonContainer.style.zIndex = '9999';
     buttonContainer.innerHTML = `
         <button id="japanese-button">日本語</button>
         <button id="english-button">English</button>
@@ -409,42 +408,43 @@ function init() {
             var rphotos = ''; // Object to store dynamically created variables
 
             for (let i = 1; i <= numphotos; i++) {
-                rphotos+=`<div class="mySlides fade"><img src="https://chomu0831.github.io/reitaku-photos/images/reitaku-${id}-${i}.jpg" style="width:100%;height:350px;object-fit:cover"></div> `;
+                rphotos+=`<div class="mySlides fade"><img src="images/reitaku-${id}-${i}.jpg" style="width:100%;height:350px;object-fit:cover"></div> `;
             }
 
             // console.log(rphotos);
             // カスタムマーカー用のHTML要素を作成
             const customMarker = document.createElement('div');
             if (category == 4) {
-                customMarker.style.backgroundImage = `url(https://chomu0831.github.io/reitaku-photos/images/reitaku-ex-1.jpg)`;
+                customMarker.style.backgroundImage = `url(images/reitaku-ex-1.jpg)`;
                 customMarker.style.width = '25px';
                 customMarker.style.height = '25px';
                 customMarker.style.zIndex = index;
             } 
             else if (category == 5){
-                customMarker.style.backgroundImage = `url(https://chomu0831.github.io/reitaku-photos/images/reitaku-ex-2.jpg)`;
+                customMarker.style.backgroundImage = `url(images/reitaku-ex-2.jpg)`;
                 customMarker.style.width = '25px';
                 customMarker.style.height = '25px';
                 customMarker.style.zIndex = index;
             }
             else if (category == 0) {
-                customMarker.style.backgroundImage = `url(https://chomu0831.github.io/reitaku-photos/images/reitaku-${id}-1.jpg)`;
+                customMarker.style.backgroundImage = `url(images/reitaku-${id}-1.jpg)`;
                 customMarker.style.width = '40px';
                 customMarker.style.height = '40px';
                 customMarker.style.zIndex = '1000';
             }
             else {
-                customMarker.style.backgroundImage = `url(https://chomu0831.github.io/reitaku-photos/images/reitaku-${id}-1.jpg)`;
+                customMarker.style.backgroundImage = `url(images/reitaku-${id}-1.jpg)`;
                 customMarker.style.width = '40px';
                 customMarker.style.height = '40px';
                 customMarker.style.zIndex = index;
             }
-            // customMarker.style.backgroundImage = `url(https://chomu0831.github.io/reitaku-photos/images/reitaku-${id}-1.jpg)`;
+            // customMarker.style.backgroundImage = `url(images/reitaku-${id}-1.jpg)`;
             customMarker.style.backgroundSize = 'cover';
             customMarker.style.borderRadius = '50%';
             customMarker.style.cursor = 'pointer';
-            customMarker.style.border = `2px solid ${getCategoryColor(category)}`;
-            customMarker.style.border = `0 0 0 2px white, 0 0 0 4px ${getCategoryColor(category)}`;
+            customMarker.style.border = `2px solid white`;
+            // customMarker.style.border = `2px solid ${getCategoryColor(category)}`;
+            customMarker.style.border = `0 0 0 2px white, 0 0 0 4px white`;
 
             // マーカーをマップに追加
             const marker = new mapboxgl.Marker({ element: customMarker })
@@ -482,14 +482,14 @@ function init() {
 }
 
 // カテゴリごとに色を取得するヘルパー関数
-function getCategoryColor(category) {
-    switch (parseInt(category)) {
-        case 0: return '#FFFF33'; // 黄色系
-        case 1: return '#33FF57'; // 緑系
-        case 2: return '#3357FF'; // 青系
-        case 3: return '#FF33FF'; // ピンク系
-        case 4: return '#FF5733'; // オレンジ系
-        case 5: return '#33FFFF'; // シアン系
-        default: return '#ffffff'; // 白系
-    }
-}
+// function getCategoryColor(category) {
+//     switch (parseInt(category)) {
+//         case 0: return '#FFFF33'; // 黄色系
+//         case 1: return '#33FF57'; // 緑系
+//         case 2: return '#3357FF'; // 青系
+//         case 3: return '#FF33FF'; // ピンク系
+//         case 4: return '#FF5733'; // オレンジ系
+//         case 5: return '#33FFFF'; // シアン系
+//         default: return '#ffffff'; // 白系
+//     }
+// }
