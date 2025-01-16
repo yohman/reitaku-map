@@ -2,7 +2,7 @@ function init() {
 
     let slideIndex = 1;
     let slideInterval;
-    // showSlides(slideIndex);
+     //showSlides(slideIndex);
 
     function plusSlides(n) {
         showSlides(slideIndex += n);
@@ -45,12 +45,24 @@ function init() {
     let lastClickedMarker = null; // 最後にクリックしたマーカーを追跡
     // 言語切り替え設定
      let currentLanguage = 'japanese'; // 初期言語
-     function setLanguage(language) {
+    function setLanguage(language) {
          currentLanguage = language;
-         if (lastClickedMarker) {
+        if (lastClickedMarker) {
              lastClickedMarker.getElement().click(); // 最後にクリックしたマーカーを再クリックして更新
-         }
-     }
+        }
+         updateTextContent();
+    }
+
+    function updateTextContent() { // ここを追加
+        const elements = document.querySelectorAll('[data-japanese], [data-english]');
+        elements.forEach(element => {
+            if (currentLanguage === 'japanese') {
+                element.textContent = element.getAttribute('data-japanese');
+            } else {
+                element.textContent = element.getAttribute('data-english');
+            }
+        });
+    }
 
     // 言語切り替えボタンを動的に追加
     const buttonContainer = document.createElement('div');
@@ -90,8 +102,8 @@ function init() {
     document.getElementById('english-button').addEventListener('click', () => setLanguage('english'));
 
     // 初期メッセージを設定
-     document.getElementById('info').innerHTML = '言語の選択とアイコンをクリックまたはタップして詳細を表示';
-         const element = document.getElementById('info');
+      document.getElementById('info').innerHTML = '言語の選択とアイコンをクリックまたはタップして詳細を表示';
+        const element = document.getElementById('info');
 
         // 要素の位置を少し下げる
         element.style.marginTop = '20px';  // 20px 下げる
@@ -307,7 +319,7 @@ function init() {
                         "gsi": {
                         "type": "raster",
                         "tiles": [
-                            "https://maps.gsi.go.jp/xyz/nendophoto2008/%7Bz%7D/%7Bx%7D/%7By%7D.png"
+                            "https://maps.gsi.go.jp/xyz/nendophoto2008/{z}/{x}/{y}.png"
                         ],
                         "tileSize": 256
                         }
@@ -330,7 +342,7 @@ function init() {
                         "gsi": {
                         "type": "raster",
                         "tiles": [
-                            "https://maps.gsi.go.jp/xyz/nendophoto2012/%7Bz%7D/%7Bx%7D/%7By%7D.png"
+                            "https://maps.gsi.go.jp/xyz/nendophoto2012/{z}/{x}/{y}.png"
                         ],
                         "tileSize": 256
                         }
@@ -353,7 +365,7 @@ function init() {
                         "gsi": {
                         "type": "raster",
                         "tiles": [
-                            "https://maps.gsi.go.jp/xyz/nendophoto2014/%7Bz%7D/%7Bx%7D/%7By%7D.png"
+                            "https://maps.gsi.go.jp/xyz/nendophoto2014/{z}/{x}/{y}.png"
                         ],
                         "tileSize": 256
                         }
@@ -376,7 +388,7 @@ function init() {
                         "gsi": {
                         "type": "raster",
                         "tiles": [
-                            "https://maps.gsi.go.jp/xyz/nendophoto2019/%7Bz%7D/%7Bx%7D/%7By%7D.png"
+                            "https://maps.gsi.go.jp/xyz/nendophoto2019/{z}/{x}/{y}.png"
                         ],
                         "tileSize": 256
                         }
