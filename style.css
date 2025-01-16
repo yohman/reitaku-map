@@ -1,100 +1,193 @@
-body { margin: 0; display: flex; flex-direction: column; }
-#left-panel { width: 30%; padding: 20px; overflow-y: auto; border-right: 1px solid #ddd; height: auto; }
-#right-panel { width: 70%; }
-#map { height: 100vh; width: 100%; }
-#map-style { position: absolute; top: 9px; right: 10px; z-index: 9999; }
-#marker-filter-dropdown { position: absolute; top: 9px; right: 110px; z-index: 9999; }
-#left-panel { display: flex; justify-content: center; align-items: center; }
-
-.slideshow-container {
-    position: relative;
-    max-width: 100%;
-    margin: auto;
-}
-
-.mySlides img {
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-}
-
-button {
-    background-color: #f1f1f1;
-    color: black;
-    padding: 5px 10px;
-    margin: 5px;
-    cursor: pointer;
-    border: none;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
-}
-
-button:hover {
-    background-color: #ddd;
-}
-
 /* PC用レイアウト */
 @media (min-width: 768px) {
-    body { flex-direction: row; }
-    #left-panel { width: 30%; height: auto; }
-    #right-panel { width: 70%; }
+    body {
+        margin: 0;
+        display: flex;
+        flex-direction: row;
+    }
+    #left-panel {
+        width: 30%;
+        padding: 20px;
+        overflow-y: auto;
+        border-right: 1px solid #ddd;
+        height: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    #right-panel {
+        width: 70%;
+    }
+    #map {
+        height: 100vh;
+        width: 100%;
+    }
+    #map-style {
+        position: absolute;
+        top: 9px;
+        right: 10px;
+        z-index: 9999;
+    }
+    #marker-filter-dropdown {
+        position: absolute;
+        top: 9px;
+        right: 110px;
+        z-index: 9999;
+    }
+    .slideshow-container {
+        position: relative;
+        max-width: 100%;
+        margin: auto;
+    }
+    .mySlides img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+    }
+    button {
+        background-color: #f1f1f1;
+        color: black;
+        padding: 5px 10px;
+        margin: 5px;
+        cursor: pointer;
+        border: none;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+    }
+    button:hover {
+        background-color: #ddd;
+    }
+    .mySlides {
+        display: none;
+    }
+    .fade {
+        animation-name: fade;
+        animation-duration: 1.5s;
+    }
+    @keyframes fade { from {opacity: .4} to {opacity: 1} }
+    .prev, .next {
+        cursor: pointer;
+        position: absolute;
+        top: 50%;
+        width: auto;
+        padding: 16px;
+        margin-top: -22px;
+        color: white;
+        font-weight: bold;
+        font-size: 18px;
+        transition: 0.6s ease;
+        border-radius: 0 3px 3px 0;
+        user-select: none;
+    }
+    .prev {
+        left: 0;
+        border-radius: 3px 0 0 3px;
+    }
+    .next {
+        right: 0;
+        border-radius: 3px 0 0 3px;
+    }
+    .prev:hover, .next:hover {
+        background-color: rgba(0,0,0,0.8);
+    }
 }
 
 /* スマートフォン用レイアウト */
 @media (max-width: 767px) {
-    #left-panel { width: 90%; height: auto ; border-right: none; border-top: 1px solid #ddd; order: 2; }
-    #right-panel { width: 100%; height: 50vh; order: 1; }
-    #map { height: 50vh; }
-    #map-style { position: absolute; right: 10px; z-index: 1; }
-    #marker-filter-dropdown { right: 265px; z-index: 1; }
-}
-
-aku-map/style.css */
-.slideshow-container {
-    position: relative;
-    max-width: 100%;
-    margin: auto;
-}
-
-.mySlides {
-    display: none;
-}
-
-.fade {
-    animation-name: fade;
-    animation-duration: 1.5s;
-}
-
-@keyframes fade {
-    from {opacity: .4} 
-    to {opacity: 1}
-}
-
-.prev, .next {
-    cursor: pointer;
-    position: absolute;
-    top: 50%;
-    width: auto;
-    padding: 16px;
-    margin-top: -22px;
-    color: white;
-    font-weight: bold;
-    font-size: 18px;
-    transition: 0.6s ease;
-    border-radius: 0 3px 3px 0;
-    user-select: none;
-}
-
-.prev {
-    left: 0;
-    border-radius: 3px 0 0 3px;
-}
-
-.next {
-    right: 0;
-    border-radius: 3px 0 0 3px;
-}
-
-.prev:hover, .next:hover {
-    background-color: rgba(0,0,0,0.8);
+    body {
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        overflow-y: hidden;
+    }
+    #left-panel {
+        width: 90%;
+        padding: 20px;
+        overflow-y: auto;
+        border-top: 1px solid #ddd;
+        height: clac(100vh - 50vh);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        order: 2;
+    }
+    #right-panel {
+        width: 100%;
+        height: 50vh;
+        order: 1;
+        overflow-y: hidden;
+    }
+    #map {
+        height: 50vh;
+        width: 100%;
+        overflow-y: hidden;
+    }
+    #map-style {
+        position: absolute;
+        top: 9px;
+        right: 10px;
+        z-index: 1;
+    }
+    #marker-filter-dropdown {
+        position: absolute;
+        top: 9px;
+        right: 105px;
+        z-index: 1;
+    }
+    .slideshow-container {
+        position: relative;
+        max-width: 100%;
+        margin: auto;
+    }
+    .mySlides img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+    }
+    button {
+        background-color: #f1f1f1;
+        color: black;
+        padding: 5px 10px;
+        margin: 5px;
+        cursor: pointer;
+        border: none;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+    }
+    button:hover {
+        background-color: #ddd;
+    }
+    .mySlides {
+        display: none;
+    }
+    .fade {
+        animation-name: fade;
+        animation-duration: 1.5s;
+    }
+    @keyframes fade { from {opacity: .4} to {opacity: 1} }
+    .prev, .next {
+        cursor: pointer;
+        position: absolute;
+        top: 50%;
+        width: auto;
+        padding: 16px;
+        margin-top: -22px;
+        color: white;
+        font-weight: bold;
+        font-size: 18px;
+        transition: 0.6s ease;
+        border-radius: 0 3px 3px 0;
+        user-select: none;
+    }
+    .prev {
+        left: 0;
+        border-radius: 3px 0 0 3px;
+    }
+    .next {
+        right: 0;
+        border-radius: 3px 0 0 3px;
+    }
+    .prev:hover, .next:hover {
+        background-color: rgba(0,0,0,0.8);
+    }
 }
