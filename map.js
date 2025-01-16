@@ -1,3 +1,5 @@
+let map; // グローバル変数として定義
+
 function init() {
 
     let slideIndex = 1;
@@ -46,11 +48,12 @@ function init() {
     // 言語切り替え設定
      let currentLanguage = 'japanese'; // 初期言語
     function setLanguage(language) {
-         currentLanguage = language;
-        if (lastClickedMarker) {
-             lastClickedMarker.getElement().click(); // 最後にクリックしたマーカーを再クリックして更新
-        }
-         updateTextContent();
+        currentLanguage = language;
+        regenerateLeftPanel(); // 左パネルを再生成
+        // if (lastClickedMarker) {
+        //      lastClickedMarker.getElement().click(); // 最後にクリックしたマーカーを再クリックして更新
+        // }
+        //  updateTextContent();
     }
 
     function updateTextContent() { // ここを追加
@@ -73,6 +76,8 @@ function init() {
     buttonContainer.innerHTML = `
         <button id="japanese-button">日本語</button>
         <button id="english-button">English</button>
+        <button id="add-geojson-layer-button">3D on</button>
+        <button id="remove-geojson-layer-button">3D off</button>
     `;
     document.body.appendChild(buttonContainer);
 
@@ -100,6 +105,8 @@ function init() {
     // ボタンクリックイベントを登録
     document.getElementById('japanese-button').addEventListener('click', () => setLanguage('japanese'));
     document.getElementById('english-button').addEventListener('click', () => setLanguage('english'));
+    document.getElementById('add-geojson-layer-button').addEventListener('click', addGeoJsonLayer);
+    document.getElementById('remove-geojson-layer-button').addEventListener('click', removeGeoJsonLayer);
 
     // 初期メッセージを設定
       document.getElementById('info').innerHTML = '言語の選択とアイコンをクリックまたはタップして詳細を表示';
@@ -143,6 +150,9 @@ function init() {
 
     console.log(rows);
 
+    // current marker idの変数
+    let currentMarkerId = null;
+
     function initMap() {
         console.log('initMap');
         console.log(rows)
@@ -168,14 +178,18 @@ function init() {
         const centerlon = lonSum / rows.length;
 
         console.log(centerlat, centerlon);
-        // Mapboxマップを初期化
-        const map = new mapboxgl.Map({
-            container: 'map',
-            center: [centerlon, centerlat],
-            //style: 'mapbox://styles/mapbox/satellite-v9',
-            style: 'mapbox://styles/mapbox/streets-v11',
-            zoom: 15
-        });
+
+        if (!map) { // mapが存在しない場合のみ初期化
+            map = new mapboxgl.Map({
+                container: 'map',
+                center: [centerlon, centerlat],
+                //style: 'mapbox://styles/mapbox/satellite-v9',
+                style: 'mapbox://styles/mapbox/streets-v11',
+                zoom: 15
+            });
+        } else {
+            map.setCenter([centerlon, centerlat]);
+        }
         // document.getElementById('normal-map-btn').addEventListener('click', () => {
         //     map.setStyle('mapbox://styles/mapbox/streets-v11');
         // });
@@ -469,6 +483,13 @@ function init() {
 
             // クリックイベントで左パネルをトグル表示
             marker.getElement().addEventListener('click', () => {
+                
+                // consoleでmarkerのidを表示
+                console.log(id);
+                
+                //currentMarkerIdにidを代入
+                currentMarkerId = id;
+
                 if (lastClickedMarker === marker) {
                     document.getElementById('info').innerHTML = '言語を選択とマーカーをクリックまたはタップして詳細を表示';
                     lastClickedMarker = null;
@@ -484,13 +505,60 @@ function init() {
                             <a class="next" onclick="plusSlides(1)">&#10095;</a>
                         </div>
                         <a href="${link}" target="_blank">${linkname}</a>
-                        <a href="${hashutagu}">${hashutagu}</a>
                     `;
                     lastClickedMarker = marker;
                 }
             });
         });
+
+        
     }
+    // create a function that regenerates the left panel based on the current marker id
+    function regenerateLeftPanel() {
+        // find the row that matches the current marker id
+        const row = rows.find(row => row[0] === currentMarkerId);
+        if (!row) return; // if no row is found, exit the function
+
+        const [id, category, jName, eName, lat, lon, jDescription, eDescription,link,hashutagu,linkname,numphotos] = row;
+        var rphotos = ''; // Object to store dynamically created variables
+
+        for (let i = 1; i <= numphotos; i++) {
+            rphotos+=`<div class="mySlides fade"><img src="images/reitaku-${id}-${i}.jpg" style="width:100%;height:350px;object-fit:cover"></div> `;
+        }
+
+        const description = currentLanguage === 'japanese' ? jDescription : eDescription;
+        const name = currentLanguage === 'japanese' ? jName : eName;
+        document.getElementById('info').innerHTML = `
+            <h2>${name}</h2>
+            <p>${description}</p>
+            <div class="slideshow-container">
+                ${rphotos}
+                <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                <a class="next" onclick="plusSlides(1)">&#10095;</a>
+            </div>
+            <a href="${link}" target="_blank">${linkname}</a>
+        `;
+    }
+
+    // 初期設定
+    initMap();
+
+    // filter rows based on marker-filter dropdown
+    const markerFilterDropdown = document.getElementById('marker-filter');
+    markerFilterDropdown.addEventListener('change', function() {
+        const category = parseInt(markerFilterDropdown.value);
+        console.log(category);
+        if (category == -1) {
+            console.log('all');
+            rows = data.main.values;
+        } else {
+            console.log('filtered');
+            rows = data.main.values.filter(row => parseInt(row[1]) === category);
+        }
+        
+        initMap();
+    });
+
 }
 
 // カテゴリごとに色を取得するヘルパー関数
@@ -505,3 +573,33 @@ function init() {
 //         default: return '#ffffff'; // 白系
 //     }
 // }
+
+function addGeoJsonLayer() {
+    map.addSource('geojson-data', {
+        type: 'geojson',
+        data: 'data/map.geojson'
+    });
+
+    map.easeTo({
+        pitch: 60, // 地図の傾斜角度を設定
+        bearing: -17.6, // 地図の回転角度を設定
+        duration: 1000 // アニメーションの持続時間を設定
+    });
+
+    map.addLayer({
+        id: 'geojson-layer',
+        type: 'fill-extrusion',
+        source: 'geojson-data',
+        paint: {
+            'fill-extrusion-color': '#007cbf',
+            'fill-extrusion-height': 20,
+            'fill-extrusion-base': 0,
+            'fill-extrusion-opacity': 0.6
+        }
+    });
+}
+
+function removeGeoJsonLayer() {
+    map.removeLayer('geojson-layer');
+    map.removeSource('geojson-data');
+}
