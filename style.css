@@ -8,7 +8,7 @@
     }
     #left-panel {
         width: 30%;
-        padding: 20px;
+        padding: 40px 10px;
         /* overflow-y: auto; */
         border-right: 1px solid #ddd;
         height: 100vh;
@@ -16,6 +16,7 @@
         background: white;
         z-index: 2;
         transition: margin-left 0.3s ease-in-out;
+        background-color: rgba(41,100,96,0.2);
     }
     #left-panel.closed {
         margin-left: calc(-30% + -40px);
@@ -25,7 +26,7 @@
     }
     #panel-handle {
         position: absolute;
-        right: -30px;
+        right: -32px;
         top: 50%;
         transform: translateY(-50%);
         width: 30px;
@@ -41,7 +42,7 @@
         box-shadow: 2px 0 4px rgba(0,0,0,0.1);
     }
     .handle-icon {
-        color: #204e00; /* replaced #007cbf */
+        color: #296460; /* replaced #296460 */
         font-size: 24px;
         font-weight: bold;
         transform: rotate(180deg); /* Point left when open */
@@ -108,14 +109,14 @@
         padding-right: 30px;
     }
     button.map-control {
-        background-color: #204e00; /* replaced #007cbf */
+        background-color: #296460; /* replaced #296460 */
         color: white;
         border: none;
         cursor: pointer;
         transition: background-color 0.3s;
     }
     button.map-control:hover {
-        background-color: #163900; /* replaced #005f8f */
+        background-color: #darkcodebase; /* replaced #163900 */
     }
     #language-control {
         display: none;
@@ -131,7 +132,7 @@
         object-fit: cover;
     }
     button {
-        background-color: #204e00; /* replaced #007cbf */
+        background-color: #296460; /* replaced #296460 */
         color: white;
         padding: 10px 20px;
         margin: 5px;
@@ -142,7 +143,7 @@
         font-size: 16px;
     }
     button:hover {
-        background-color: #163900; /* replaced #005f8f */
+        background-color: #darkcodebase; /* replaced #163900 */
         transform: scale(1.05);
     }
     .mySlides {
@@ -217,7 +218,7 @@
         box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
     }
     .handle-icon {
-        color: #204e00; /* replaced #007cbf */
+        color: #296460; /* replaced #296460 */
         font-size: 24px;
         font-weight: bold;
         transform: rotate(-90deg); /* Point up when open */
@@ -275,14 +276,14 @@
         padding-right: 30px;
     }
     button.map-control {
-        background-color: #204e00; /* replaced #007cbf */
+        background-color: #296460; /* replaced #296460 */
         color: white;
         border: none;
         cursor: pointer;
         transition: background-color 0.3s;
     }
     button.map-control:hover {
-        background-color: #163900; /* replaced #005f8f */
+        background-color: #darkcodebase; /* replaced #163900 */
     }
     #language-control {
         display: none;
@@ -298,7 +299,7 @@
         object-fit: cover;
     }
     button {
-        background-color: #204e00; /* replaced #007cbf */
+        background-color: #296460; /* replaced #296460 */
         color: white;
         padding: 10px 20px;
         margin: 5px;
@@ -309,7 +310,7 @@
         font-size: 16px;
     }
     button:hover {
-        background-color: #163900; /* replaced #005f8f */
+        background-color: #darkcodebase; /* replaced #163900 */
         transform: scale(1.05);
     }
     .mySlides {
@@ -389,13 +390,13 @@
 }
 
 input:checked + .slider {
-    background-color: #204e00; /* replaced #007cbf */
-    border-color: #1a3f00; /* replaced #006ba3 */
+    background-color: #296460; /* replaced #296460 */
+    border-color: #darkcodebase; /* replaced #1a3f00 */
 }
 
 input:checked + .slider:before {
     transform: translateX(20px);
-    border-color: #1a3f00; /* replaced #006ba3 */
+    border-color: #darkcodebase; /* replaced #1a3f00 */
 }
 
 .switch-label {
@@ -430,7 +431,7 @@ input:checked + .slider:before {
 
 input:checked + .lang-slider .en,
 .lang-slider .ja {
-    color: #204e00; /* replaced #007cbf */
+    color: #296460; /* replaced #296460 */
 }
 
 input:checked + .lang-slider .ja,
@@ -497,8 +498,8 @@ input:checked + .lang-slider .ja,
 }
 
 .checkbox-label input[type="checkbox"]:checked {
-    background-color: #204e00; /* replaced #007cbf */
-    border-color: #1a3f00; /* replaced #006ba3 */
+    background-color: #296460; /* replaced #296460 */
+    border-color: #darkcodebase; /* replaced #1a3f00 */
 }
 
 .checkbox-label input[type="checkbox"]:checked::after {
@@ -531,13 +532,13 @@ input:checked + .lang-slider .ja,
 }
 
 .control-link {
-    color: #204e00; /* replaced #007cbf */
+    color: #296460; /* replaced #296460 */
     text-decoration: none;
     transition: color 0.3s;
 }
 
 .control-link:hover {
-    color: #163900; /* replaced #005f8f */
+    color: #darkcodebase; /* replaced #163900 */
     text-decoration: underline;
 }
 
@@ -550,7 +551,7 @@ input:checked + .lang-slider .ja,
     top: 10px;
     right: 10px;
     z-index: 10000;
-    background: #204e00; /* replaced #007cbf */
+    background: #296460; /* replaced #296460 */
     color: white;
     border: none;
     padding: 8px 16px;
@@ -562,7 +563,7 @@ input:checked + .lang-slider .ja,
 }
 
 .tools-toggle:hover {
-    background-color: #163900; /* replaced #005f8f */
+    background-color: #darkcodebase; /* replaced #163900 */
 }
 
 .control-row {
@@ -631,10 +632,20 @@ input:checked + .lang-slider .ja,
   box-sizing: border-box;
 }
 .switch-3d input:checked + .slider {
-  background-color: #204e00; /* replaced #007cbf */
-  border-color: #1a3f00; /* replaced #006ba3 */
+  background-color: #296460; /* replaced #296460 */
+  border-color: #darkcodebase; /* replaced #1a3f00 */
 }
 .switch-3d input:checked + .slider:before {
   transform: translateX(20px);
-  border-color: #1a3f00; /* replaced #006ba3 */
+  border-color: #darkcodebase; /* replaced #1a3f00 */
+}
+
+#reitaku-logo {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 100px;
+    height: auto;
+    z-index: 10000;
+    filter: drop-shadow(0 0 2px white);
 }
