@@ -445,31 +445,35 @@ function init() {
                 customMarker.style.width = '25px';
                 customMarker.style.height = '25px';
                 customMarker.style.zIndex = index;
+                customMarker.style.borderRadius = '50%';
             } 
             else if (category == 5){
                 customMarker.style.backgroundImage = `url(images/reitaku-ex-2.jpg)`;
                 customMarker.style.width = '25px';
                 customMarker.style.height = '25px';
                 customMarker.style.zIndex = index;
+                customMarker.style.borderRadius = '0%';
             }
             else if (category == 0) {
                 customMarker.style.backgroundImage = `url(images/reitaku-${id}-1.jpg)`;
                 customMarker.style.width = '40px';
                 customMarker.style.height = '40px';
                 customMarker.style.zIndex = '1000';
+                customMarker.style.borderRadius = '50%';
             }
             else {
                 customMarker.style.backgroundImage = `url(images/reitaku-${id}-1.jpg)`;
                 customMarker.style.width = '40px';
                 customMarker.style.height = '40px';
                 customMarker.style.zIndex = index;
+                customMarker.style.borderRadius = '50%';
             }
             // customMarker.style.backgroundImage = `url(images/reitaku-${id}-1.jpg)`;
+            // customMarker.style.borderRadius = '50%';
+            // customMarker.style.border = `2px solid ${getCategoryColor(category)}`;
             customMarker.style.backgroundSize = 'cover';
-            customMarker.style.borderRadius = '50%';
             customMarker.style.cursor = 'pointer';
             customMarker.style.border = `2px solid white`;
-            // customMarker.style.border = `2px solid ${getCategoryColor(category)}`;
             customMarker.style.border = `0 0 0 2px white, 0 0 0 4px white`;
 
             // マーカーをマップに追加
