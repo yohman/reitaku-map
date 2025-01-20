@@ -8,7 +8,7 @@ function init() {
 
     function plusSlides(n) {
         showSlides(slideIndex += n);
-        resetSlideInterval();
+        // resetSlideInterval();
     }
 
     function showSlides(n) {
@@ -74,8 +74,7 @@ function init() {
     buttonContainer.style.left = '10px';
     buttonContainer.style.zIndex = '9999';
     buttonContainer.innerHTML = `
-        <button id="japanese-button">日本語</button>
-        <button id="english-button">English</button>
+        <button id="language-toggle-button">Ja/En</button>
         <button id="add-geojson-layer-button">3D on</button>
         <button id="remove-geojson-layer-button">3D off</button>
     `;
@@ -103,8 +102,10 @@ function init() {
     window.addEventListener('resize', updatePositions);
 
     // ボタンクリックイベントを登録
-    document.getElementById('japanese-button').addEventListener('click', () => setLanguage('japanese'));
-    document.getElementById('english-button').addEventListener('click', () => setLanguage('english'));
+    document.getElementById('language-toggle-button').addEventListener('click', () => {
+        const newLanguage = currentLanguage === 'japanese' ? 'english' : 'japanese';
+        setLanguage(newLanguage);
+    });
     document.getElementById('add-geojson-layer-button').addEventListener('click', addGeoJsonLayer);
     document.getElementById('remove-geojson-layer-button').addEventListener('click', removeGeoJsonLayer);
 
@@ -596,7 +597,7 @@ function addGeoJsonLayer() {
         source: 'geojson-data',
         paint: {
             'fill-extrusion-color': '#007cbf',
-            'fill-extrusion-height': 20,
+            'fill-extrusion-height': ['get', 'height'],
             'fill-extrusion-base': 0,
             'fill-extrusion-opacity': 0.6
         }
