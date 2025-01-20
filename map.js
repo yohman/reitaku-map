@@ -426,8 +426,8 @@ function addGeoJsonLayer() {
 	});
 
 	map.easeTo({
-		pitch: 60, // 地図の傾斜角度を設定
-		bearing: -17.6, // 地図の回転角度を設定
+		pitch: 50, // 地図の傾斜角度を設定
+		bearing: -10, // 地図の回転角度を設定
 		duration: 1000 // アニメーションの持続時間を設定
 	});
 
