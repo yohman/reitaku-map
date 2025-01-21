@@ -1,4 +1,5 @@
 let map; // グローバル変数として定義
+let is3DActive = false; // Track if 3D layer is currently active
 
 // Remove the DOMContentLoaded wrapper and let getdata.js handle initialization
 function init() {
@@ -223,6 +224,11 @@ function init() {
 				maxzoom: 18
 				}]
 			});
+				map.once('styledata', () => {
+					if (is3DActive) {
+						addGeoJsonLayer();
+					}
+				});
 			}
 		});
 
@@ -352,7 +358,8 @@ function init() {
 
 	// Replace the 3D button event listeners with this:
 	document.getElementById('threeDToggle').addEventListener('change', function(e) {
-		if (e.target.checked) {
+		is3DActive = e.target.checked;
+		if (is3DActive) {
 			addGeoJsonLayer();
 		} else {
 			removeGeoJsonLayer();
@@ -404,6 +411,12 @@ function init() {
 		leftPanel.classList.toggle('closed');
 	});
 
+	leftPanel.addEventListener('transitionend', (e) => {
+		if (e.propertyName === 'margin-left' || e.propertyName === 'transform') {
+			map.resize();
+		}
+	});
+
 	// Add tools panel toggle functionality
 	const toolsToggle = document.getElementById('tools-toggle');
 	const mapTools = document.getElementById('map-tools');
@@ -439,7 +452,8 @@ function addGeoJsonLayer() {
 			'fill-extrusion-color': '#204e00', // replaced #204e00
 			'fill-extrusion-height': ['get', 'height'],
 			'fill-extrusion-base': 0,
-			'fill-extrusion-opacity': 0.8
+			'fill-extrusion-opacity': 0.8,
+			'fill-extrusion-vertical-gradient': true
 		}
 	});
 }
@@ -455,3 +469,21 @@ function removeGeoJsonLayer() {
 		duration: 1000
 	});
 }
+
+// Set the height of the element with ID "left-panel" to the window height
+function adjustLeftPanelHeight() {
+    let windowHeight = window.innerHeight; // Get the window height
+    const leftPanel = document.getElementById('left-panel'); // Get the element
+    if (leftPanel) {
+		console.log(windowHeight);
+		windowHeight = windowHeight - 80;
+        leftPanel.style.height = `${windowHeight}px`; // Set the height in pixels
+		// document.getElementById("left-panel").style.height="100px"
+    }
+}
+
+// Adjust the height on page load
+adjustLeftPanelHeight();
+
+// Adjust the height on window resize
+window.addEventListener('resize', adjustLeftPanelHeight);
