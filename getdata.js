@@ -33,22 +33,20 @@ async function checkAndInit() {
 	const promises = sheetNames.map(sheetName => fetchData(sheetName));
 	const results = await Promise.all(promises);
 
-	// データがすべてのシートから取得されたか確認
-	const allDataFetched = results.every(result => result !== null);
-
-	if (allDataFetched) {
-		// データをオブジェクトに格納
+	if (results.every(result => result !== null)) {
 		results.forEach((result, index) => {
 			data[sheetNames[index]] = result;
 		});
 		console.log('Data object:', data);
 
-		// 各ページにあるinit関数を実行
-		init();
-		// Googleシートのデータが読み込まれた後
-		document.dispatchEvent(new Event('dataLoaded'));
+		// Wait for both DOM and data to be ready
+		if (document.readyState === 'loading') {
+			document.addEventListener('DOMContentLoaded', init);
+		} else {
+			init();
+		}
 	} else {
-		console.log('一部またはすべてのシートからデータを取得できませんでした。');
+		console.log('Failed to fetch data from some or all sheets.');
 	}
 }
 
