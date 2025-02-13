@@ -193,9 +193,11 @@
         height: 50vh;
         position: fixed;
         bottom: 0;
-        background: white;
+        background: rgba(41, 100, 96, 0.2);
         z-index: 2;
         transition: transform 0.3s ease-in-out;
+        background-color: rgba(41, 100, 96, 0.2);
+        overflow-y: auto;
     }
     #left-panel.closed {
         transform: translateY(calc(100% - 30px)); /* Leave 30px visible */
@@ -247,8 +249,9 @@
     }
     #map-tools {
         position: absolute;
-        top: 10px;
+        top: 50px;
         /* top: auto; */
+        right: 10px;
         z-index: 9999;
         padding: 10px;
         background-color: white;
