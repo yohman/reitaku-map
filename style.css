@@ -231,12 +231,12 @@
     }
     #right-panel {
         width: 100%;
-        height: 50%;
+        height: 50vh;
         order: 1;
         overflow-y: hidden;
     }
     #map {
-        height: 50%;
+        height: 50vh;
         width: 100%;
         overflow-y: hidden;
         z-index: 1; /* Ensure map stays below panel and handle */
