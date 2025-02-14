@@ -236,7 +236,7 @@
         overflow-y: hidden;
     }
     #map {
-        height: 50vh;
+        height: 50%;
         width: 100%;
         overflow-y: hidden;
         z-index: 1; /* Ensure map stays below panel and handle */
