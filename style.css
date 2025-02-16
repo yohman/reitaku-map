@@ -181,16 +181,24 @@
     }
 }
 
-/* スマートフォン用レイアウト */
+/* =========================
+
+
+    スマートフォン用レイアウト
+
+
+    ========================= */
 @media (max-width: 767px) {
     body {
         margin: 0;
         display: flex;
         flex-direction: column;
+        overflow: hidden;
+        height: 100vh; /* Ensure body takes full viewport height */
     }
     #left-panel {
         width: 100%;
-        height: 50%;
+        height: 50vh;
         position: fixed;
         bottom: 0;
         background: rgba(41, 100, 96, 0.2);
@@ -198,13 +206,25 @@
         transition: transform 0.3s ease-in-out;
         background-color: rgba(41, 100, 96, 0.2);
         overflow-y: auto;
+        transform: translateY(100%); /* Start hidden */
+        padding: 20px;
+        box-sizing: border-box;
     }
     #left-panel.closed {
-        transform: translateY(calc(100% - 30px)); /* Leave 30px visible */
+        transform: translateY(100%);
+    }
+    #left-panel:not(.closed) {
+        transform: translateY(0); /* Show panel when not closed */
+    }
+    #left-panel:not(.closed) + #right-panel {
+        height: 50vh;
+    }
+    #left-panel:not(.closed) + #right-panel #map {
+        height: 50vh;
     }
     #panel-handle {
-        position: absolute;
-        top: -30px;
+        position: fixed; /* Change to fixed */
+        bottom: 46vh; /* Position at the middle of the viewport */
         left: 50%;
         transform: translateX(-50%);
         width: 60px;
@@ -216,30 +236,35 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        border-radius: 4px 4px 0 0;
+        border-radius: 0 0 0 0;
         box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+        z-index: 1000;
+        transition: bottom 0.3s ease-in-out;
+    }
+    #left-panel.closed #panel-handle {
+        bottom: 0; /* Move handle to bottom when panel is closed */
     }
     .handle-icon {
-        color: #296460; /* replaced #296460 */
+        color: #296460;
         font-size: 24px;
         font-weight: bold;
-        transform: rotate(-90deg); /* Point up when open */
+        transform: rotate(90deg); /* Changed from -90deg to 90deg */
         transition: transform 0.3s;
     }
     #left-panel.closed .handle-icon {
-        transform: rotate(90deg); /* Point down when closed */
+        transform: rotate(-90deg); /* Changed from 90deg to -90deg */
     }
     #right-panel {
         width: 100%;
-        height: 50vh;
-        order: 1;
-        overflow-y: hidden;
+        height: 100vh; /* Default to full height */
+        transition: height 0.3s ease-in-out;
+        position: relative;
+        flex-shrink: 0; /* Prevent panel from shrinking */
     }
     #map {
-        height: 50vh;
+        height: 100vh; /* Default to full height */
         width: 100%;
-        overflow-y: hidden;
-        z-index: 1; /* Ensure map stays below panel and handle */
+        transition: height 0.3s ease-in-out;
     }
     #map-style {
         display: none;
@@ -348,6 +373,16 @@
     }
     .prev:hover, .next:hover {
         background-color: rgba(0,0,0,0.8);
+    }
+    
+    /* Add this new style for when panel is open */
+    body.panel-open {
+        height: 100vh;
+        overflow: hidden;
+    }
+    body.panel-open #right-panel,
+    body.panel-open #map {
+        height: 50vh;
     }
 }
 
