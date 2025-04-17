@@ -285,11 +285,11 @@ function init() {
 					document.getElementById('info').innerHTML = `
 						<h2>${currentLanguage === 'japanese' ? jName : eName}</h2>
 						<p>${currentLanguage === 'japanese' ? jDescription : eDescription}</p>
+						<a href="${link}" target="_blank">${linkname}</a>
 						<div class="slideshow-container">
 							${rphotos}
 							${arrows}
 						</div>
-						<a href="${link}" target="_blank">${linkname}</a>
 					`;
 					lastClickedMarker = marker;
 					showSlides(1);  // Reset to first slide when marker is clicked
