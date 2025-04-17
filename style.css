@@ -9,7 +9,8 @@
     #left-panel {
         width: 30%;
         padding: 40px 10px;
-        /* overflow-y: auto; */
+        /* overflow-x: hidden; */
+        overflow-y: auto;
         border-right: 1px solid #ddd;
         height: 100vh;
         position: relative;
