@@ -9,11 +9,13 @@
     #left-panel {
         width: 30%;
         padding: 40px 10px;
-        /* overflow-y: auto; */
+        /* overflow-x: hidden; */
+        overflow-y: auto;
         border-right: 1px solid #ddd;
         height: 100vh;
         position: relative;
         background: white;
+        box-sizing: border-box;
         z-index: 2;
         transition: margin-left 0.3s ease-in-out;
         background-color: rgba(41,100,96,0.2);
