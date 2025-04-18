@@ -322,11 +322,12 @@ function init() {
 		document.getElementById('info').innerHTML = `
 			<h2>${name}</h2>
 			<p>${description}</p>
+			<a href="${link}" target="_blank">${linkname}</a>
 			<div class="slideshow-container">
 				${rphotos}
 				${arrows}
 			</div>
-			<a href="${link}" target="_blank">${linkname}</a>
+			
 		`;
 		showSlides(1);  // Reset to first slide when panel is regenerated
 	}
