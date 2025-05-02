@@ -334,9 +334,7 @@ function init() {
 			customMarker.title = currentLanguage === 'japanese' ? jName : eName;
 
 			marker.getElement().addEventListener('click', () => {
-				currentMarkerId = id;
-				leftPanel.classList.remove('closed'); // Open panel when marker is clicked
-
+				// If same marker is clicked again, do nothing
 				if (lastClickedMarker === marker) {
 					document.getElementById('info').innerHTML = 'マーカーをクリックまたはタップして詳細を表示';
 					lastClickedMarker = null;
@@ -358,6 +356,42 @@ function init() {
 					lastClickedMarker = marker;
 					showSlides(1);  // Reset to first slide when marker is clicked
 				}
+
+				currentMarkerId = id;
+				const leftPanel = document.getElementById('left-panel');
+				const rightPanel = document.getElementById('right-panel');
+				const mapElement = document.getElementById('map');
+				
+				// Reset slide index when new marker is clicked
+				slideIndex = 1;
+				
+				// Remove closed class to show panel
+				leftPanel.classList.remove('closed');
+				document.body.classList.add('panel-open');
+				
+				// Adjust map height for mobile
+				if (window.innerWidth <= 767) {
+					setTimeout(() => {
+						map.resize();
+					}, 300);
+				}
+				
+				const arrows = numphotos > 1 ? `
+					<a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+					<a class="next" onclick="plusSlides(1)">&#10095;</a>
+				` : '';
+				
+				document.getElementById('info').innerHTML = `
+					<h2>${currentLanguage === 'japanese' ? jName : eName}</h2>
+					<p>${currentLanguage === 'japanese' ? jDescription : eDescription}</p>
+					<div class="slideshow-container">
+						${rphotos}
+						${arrows}
+					</div>
+					<a href="${link}" target="_blank">${linkname}</a>
+				`;
+				lastClickedMarker = marker;
+				showSlides(1);  // Reset to first slide when marker is clicked
 			});
 		});
 
@@ -467,6 +501,13 @@ function init() {
 
 	panelHandle.addEventListener('click', () => {
 		leftPanel.classList.toggle('closed');
+		document.body.classList.toggle('panel-open');
+		
+		if (window.innerWidth <= 767) {
+			setTimeout(() => {
+				map.resize();
+			}, 300);
+		}
 	});
 
 	// Add tools panel toggle functionality
