@@ -272,7 +272,25 @@ function init() {
 			marker.getElement().addEventListener('click', () => {
 				// If same marker is clicked again, do nothing
 				if (lastClickedMarker === marker) {
-					return;
+					document.getElementById('info').innerHTML = 'マーカーをクリックまたはタップして詳細を表示';
+					lastClickedMarker = null;
+				} else {
+					const arrows = numphotos > 1 ? `
+						<a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+						<a class="next" onclick="plusSlides(1)">&#10095;</a>
+					` : '';
+					
+					document.getElementById('info').innerHTML = `
+						<h2>${currentLanguage === 'japanese' ? jName : eName}</h2>
+						<p>${currentLanguage === 'japanese' ? jDescription : eDescription}</p>
+						<a href="${link}" target="_blank">${linkname}</a>
+						<div class="slideshow-container">
+							${rphotos}
+							${arrows}
+						</div>
+					`;
+					lastClickedMarker = marker;
+					showSlides(1);  // Reset to first slide when marker is clicked
 				}
 
 				currentMarkerId = id;
@@ -338,11 +356,12 @@ function init() {
 		document.getElementById('info').innerHTML = `
 			<h2>${name}</h2>
 			<p>${description}</p>
+			<a href="${link}" target="_blank">${linkname}</a>
 			<div class="slideshow-container">
 				${rphotos}
 				${arrows}
 			</div>
-			<a href="${link}" target="_blank">${linkname}</a>
+			
 		`;
 		showSlides(1);  // Reset to first slide when panel is regenerated
 	}

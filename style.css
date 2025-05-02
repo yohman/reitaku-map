@@ -5,12 +5,13 @@
         display: flex;
         flex-direction: row;
         font-family: sans-serif;
+        overflow-y: hidden;
     }
     #left-panel {
         width: 30%;
         padding: 40px 10px;
-        /* overflow-x: hidden; */
-        overflow-y: auto;
+        overflow-x: hidden;
+        overflow-y: auto !important;
         border-right: 1px solid #ddd;
         height: 100vh;
         position: relative;
@@ -55,8 +56,10 @@
     }
     #right-panel {
         width: 70%;
+        height: 100vh;
         position: relative;
         z-index: 1;
+        /* overflow-y: hidden !important; */
     }
     #map {
         height: 100vh;
@@ -118,7 +121,7 @@
         transition: background-color 0.3s;
     }
     button.map-control:hover {
-        background-color: #darkcodebase; /* replaced #163900 */
+        background-color: #163900; /* replaced #darkcodebase */
     }
     #language-control {
         display: none;
@@ -145,7 +148,7 @@
         font-size: 16px;
     }
     button:hover {
-        background-color: #darkcodebase; /* replaced #163900 */
+        background-color: #163900; /* replaced #darkcodebase */
         transform: scale(1.05);
     }
     .mySlides {
@@ -313,7 +316,7 @@
         transition: background-color 0.3s;
     }
     button.map-control:hover {
-        background-color: #darkcodebase; /* replaced #163900 */
+        background-color: #163900; /* replaced #darkcodebase */
     }
     #language-control {
         display: none;
@@ -340,7 +343,7 @@
         font-size: 16px;
     }
     button:hover {
-        background-color: #darkcodebase; /* replaced #163900 */
+        background-color: #163900; /* replaced #darkcodebase */
         transform: scale(1.05);
     }
     .mySlides {
@@ -431,12 +434,12 @@
 
 input:checked + .slider {
     background-color: #296460; /* replaced #296460 */
-    border-color: #darkcodebase; /* replaced #1a3f00 */
+    border-color: #1a3f00; /* replaced #darkcodebase */
 }
 
 input:checked + .slider:before {
     transform: translateX(20px);
-    border-color: #darkcodebase; /* replaced #1a3f00 */
+    border-color: #1a3f00; /* replaced #darkcodebase */
 }
 
 .switch-label {
@@ -539,7 +542,7 @@ input:checked + .lang-slider .ja,
 
 .checkbox-label input[type="checkbox"]:checked {
     background-color: #296460; /* replaced #296460 */
-    border-color: #darkcodebase; /* replaced #1a3f00 */
+    border-color: #1a3f00; /* replaced #darkcodebase */
 }
 
 .checkbox-label input[type="checkbox"]:checked::after {
@@ -578,7 +581,7 @@ input:checked + .lang-slider .ja,
 }
 
 .control-link:hover {
-    color: #darkcodebase; /* replaced #163900 */
+    color: #163900; /* replaced #darkcodebase */
     text-decoration: underline;
 }
 
@@ -603,7 +606,7 @@ input:checked + .lang-slider .ja,
 }
 
 .tools-toggle:hover {
-    background-color: #darkcodebase; /* replaced #163900 */
+    background-color: #163900; /* replaced #darkcodebase */
 }
 
 .control-row {
@@ -673,11 +676,11 @@ input:checked + .lang-slider .ja,
 }
 .switch-3d input:checked + .slider {
   background-color: #296460; /* replaced #296460 */
-  border-color: #darkcodebase; /* replaced #1a3f00 */
+  border-color: #1a3f00; /* replaced #darkcodebase */
 }
 .switch-3d input:checked + .slider:before {
   transform: translateX(20px);
-  border-color: #darkcodebase; /* replaced #1a3f00 */
+  border-color: #1a3f00; /* replaced #1a3f00 */
 }
 
 #reitaku-logo {
