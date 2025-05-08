@@ -97,7 +97,7 @@ function init() {
 
 	// Mapboxのアクセストークン
 	// mapboxgl.accessToken = 'pk.eyJ1IjoieW9oamFwYW4iLCJhIjoiY2xnYnRoOGVmMDFsbTNtbzR0eXV6a2IwZCJ9.kJYURwlqIx_cpXvi66N0uw';
-	// mapboxgl.accessToken = 'pk.eyJ1IjoieW9obWFuIiwiYSI6IkxuRThfNFkifQ.u2xRJMiChx914U7mOZMiZw';
+	mapboxgl.accessToken = 'pk.eyJ1IjoieW9obWFuIiwiYSI6IkxuRThfNFkifQ.u2xRJMiChx914U7mOZMiZw';
 
 	// データを取得
 	let rows = data.main.values;
@@ -129,7 +129,7 @@ function init() {
 		lonSum = 0;
 		let validPoints = 0;
 
-		let bounds = new maplibregl.LngLatBounds();
+		let bounds = new mapboxgl.LngLatBounds();
 
 		rows.forEach(row => {
 			const [, , , , lat, lon] = row;
@@ -160,31 +160,9 @@ function init() {
 
 		// Initialize or update map
 		if (!map) {
-			map = new maplibregl.Map({
+			map = new mapboxgl.Map({
 			container: 'map',
-			style: {
-				"version": 8,
-				"sources": {
-				  "gsi-std": {
-					"type": "raster",
-					"tiles": [
-					  "https://tile.mierune.co.jp/mierune/{z}/{x}/{y}.png"
-					], // MIERUNEのタイルURL 
-					"tileSize": 256,
-					"attribution": "© Maptiles by MIERUNE, under CC BY. Data by OpenStreetMap contributors, under ODbL."
-				  }
-				},
-				"layers": [
-				  {
-					"id": "gsi-std-layer",
-					"type": "raster",
-					"source": "gsi-std",
-					"minzoom": 0,
-					"maxzoom": 18
-				  }
-				]
-			  },
-			
+			style: 'mapbox://styles/yohman/cm658vxxv008x01st4ge57h58',			
 			center: [centerLon, centerLat],
 			// zoom: 15
 			});
@@ -206,50 +184,8 @@ function init() {
 
 		const mapDropdown = document.getElementById('map-style-dropdown');
 		const mapStyles = {
-			'normal': {
-				version: 8,
-				sources: {
-					'mierune-std': {
-						type: 'raster',
-						tiles: [
-							'https://tile.mierune.co.jp/mierune/{z}/{x}/{y}.png'
-						],
-						tileSize: 256,
-						attribution: '© Maptiles by MIERUNE, under CC BY. Data by OpenStreetMap contributors, under ODbL.'
-					}
-				},
-				layers: [
-					{
-						id: 'mierune-std-layer',
-						type: 'raster',
-						source: 'mierune-std',
-						minzoom: 0,
-						maxzoom: 18
-					}
-				]
-			},
-			'2023': {
-				version: 8,
-				sources: {
-					'google-satellite': {
-						type: 'raster',
-						tiles: [
-							'https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}'
-						],
-						tileSize: 256,
-						attribution: '© Google'
-					}
-				},
-				layers: [
-					{
-						id: 'google-satellite-layer',
-						type: 'raster',
-						source: 'google-satellite',
-						minzoom: 0,
-						maxzoom: 18
-					}
-				]
-			},
+			'normal': 'mapbox://styles/mapbox/streets-v11',
+			'2023': 'mapbox://styles/mapbox/streets-v9',
 			'1974': 'gazo1',
 			'1961': 'ort_old10',
 			'1979': 'gazo2',
@@ -273,9 +209,7 @@ function init() {
 				sources: {
 				gsi: {
 					type: 'raster',
-					tiles: [
-					`https://cyberjapandata.gsi.go.jp/xyz/${style}/{z}/{x}/{y}.${style === 'ort_old10' ? 'png' : (style.startsWith('nendophoto') ? 'png' : 'jpg')}`
-					],
+					tiles: [mapboxgl.styleURL(style)],
 					tileSize: 256
 				}
 				},
@@ -326,7 +260,7 @@ function init() {
 				boxShadow: '0 2px 4px rgba(0,0,0,0.3)'
 			});
 
-			const marker = new maplibregl.Marker({ element: customMarker })
+			const marker = new mapboxgl.Marker({ element: customMarker })
 				.setLngLat([parseFloat(lon), parseFloat(lat)])
 				.addTo(map);
 
@@ -384,11 +318,11 @@ function init() {
 				document.getElementById('info').innerHTML = `
 					<h2>${currentLanguage === 'japanese' ? jName : eName}</h2>
 					<p>${currentLanguage === 'japanese' ? jDescription : eDescription}</p>
+					<a href="${link}" target="_blank">${linkname}</a>
 					<div class="slideshow-container">
 						${rphotos}
 						${arrows}
 					</div>
-					<a href="${link}" target="_blank">${linkname}</a>
 				`;
 				lastClickedMarker = marker;
 				showSlides(1);  // Reset to first slide when marker is clicked
