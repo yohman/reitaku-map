@@ -1,610 +1,516 @@
 let map; // グローバル変数として定義
 
+// Remove the DOMContentLoaded wrapper and let getdata.js handle initialization
 function init() {
 
-    let slideIndex = 1;
-    let slideInterval;
-     //showSlides(slideIndex);
+	let slideIndex = 1;
 
-    function plusSlides(n) {
-        showSlides(slideIndex += n);
-        // resetSlideInterval();
-    }
+	function plusSlides(n) {
+		showSlides(slideIndex += n);
+	}
 
-    function showSlides(n) {
-        let i;
-        let slides = document.getElementsByClassName("mySlides");
-        if (slides.length === 0) return; // スライドが存在しない場合は処理をスキップ
-        if (n > slides.length) {slideIndex = 1}
-        if (n < 1) {slideIndex = slides.length}
-        for (i = 0; i < slides.length; i++) {
-            slides[i].style.display = "none";  
-        }
-        slides[slideIndex-1].style.display = "block";  
-    }
+	function showSlides(n) {
+		let i;
+		let slides = document.getElementsByClassName("mySlides");
+		if (slides.length === 0) return; // スライドが存在しない場合は処理をスキップ
+		if (n > slides.length) {slideIndex = 1}
+		if (n < 1) {slideIndex = slides.length}
+		for (i = 0; i < slides.length; i++) {
+			slides[i].style.display = "none";  
+		}
+		slides[slideIndex-1].style.display = "block";  
+	}
 
-    function resetSlideInterval() {
-        clearInterval(slideInterval);
-        slideInterval = setInterval(() => {
-            plusSlides(1);
-        }, 3000); // 3秒ごとにスライドを変更
-    }
+	// 矢印ボタンのクリックイベントを設定
+	document.addEventListener('click', (event) => {
+		if (event.target.matches('.prev')) {
+			plusSlides(-1);
+		} else if (event.target.matches('.next')) {
+			plusSlides(1);
+		}
+	});
+	
+	// ...existing code...
+	let lastClickedMarker = null; // 最後にクリックしたマーカーを追跡
+	// 言語切り替え設定
+	 let currentLanguage = 'japanese'; // 初期言語
+	function setLanguage(language) {
+		currentLanguage = language;
+		regenerateLeftPanel(); // 左パネルを再生成
+		// if (lastClickedMarker) {
+		//      lastClickedMarker.getElement().click(); // 最後にクリックしたマーカーを再クリックして更新
+		// }
+		//  updateTextContent();
+	}
 
-    // 初期スライド表示とインターバル設定
-    showSlides(slideIndex);
-    resetSlideInterval();
-    
-    // 矢印ボタンのクリックイベントを設定
-    document.addEventListener('click', (event) => {
-        if (event.target.matches('.prev')) {
-            plusSlides(-1);
-        } else if (event.target.matches('.next')) {
-            plusSlides(1);
-        }
-    });
-    
-    // ...existing code...
-    let lastClickedMarker = null; // 最後にクリックしたマーカーを追跡
-    // 言語切り替え設定
-     let currentLanguage = 'japanese'; // 初期言語
-    function setLanguage(language) {
-        currentLanguage = language;
-        regenerateLeftPanel(); // 左パネルを再生成
-        // if (lastClickedMarker) {
-        //      lastClickedMarker.getElement().click(); // 最後にクリックしたマーカーを再クリックして更新
-        // }
-        //  updateTextContent();
-    }
+	function updateTextContent() { // ここを追加
+		const elements = document.querySelectorAll('[data-japanese], [data-english]');
+		elements.forEach(element => {
+			if (currentLanguage === 'japanese') {
+				element.textContent = element.getAttribute('data-japanese');
+			} else {
+				element.textContent = element.getAttribute('data-english');
+			}
+		});
+	}
 
-    function updateTextContent() { // ここを追加
-        const elements = document.querySelectorAll('[data-japanese], [data-english]');
-        elements.forEach(element => {
-            if (currentLanguage === 'japanese') {
-                element.textContent = element.getAttribute('data-japanese');
-            } else {
-                element.textContent = element.getAttribute('data-english');
-            }
-        });
-    }
+	// ボタンクリックイベントを登録
+	// document.getElementById('language-toggle-button').addEventListener('click', () => {
+	//     const newLanguage = currentLanguage === 'japanese' ? 'english' : 'japanese';
+	//     setLanguage(newLanguage);
+	// });
 
-    // 言語切り替えボタンを動的に追加
-    const buttonContainer = document.createElement('div');
-    buttonContainer.style.position = 'absolute';
-    buttonContainer.style.top = '10px';
-    buttonContainer.style.left = '10px';
-    buttonContainer.style.zIndex = '9999';
-    buttonContainer.innerHTML = `
-        <button id="language-toggle-button">Ja/En</button>
-        <button id="add-geojson-layer-button">3D on</button>
-        <button id="remove-geojson-layer-button">3D off</button>
-    `;
-    document.body.appendChild(buttonContainer);
+	// Replace language button event listener with toggle
+	document.getElementById('languageToggle').addEventListener('change', function(e) {
+		const newLanguage = e.target.checked ? 'english' : 'japanese';
+		// Update all translatable elements
+		document.querySelectorAll('[data-ja], [data-en]').forEach(element => {
+			element.textContent = element.getAttribute(newLanguage === 'english' ? 'data-en' : 'data-ja');
+		});
+		setLanguage(newLanguage);
+		
+		// Update tools button text
+		const isVisible = mapTools.classList.contains('visible');
+		toolsToggle.textContent = newLanguage === 'english' 
+			? (isVisible ? 'Tools' : 'Show Tools')
+			: (isVisible ? 'ツール' : 'ツールを表示');
+	});
 
-    function updatePositions() {
-        const leftPanel = document.getElementById('left-panel');
-        const mapStyle = document.getElementById('map-style');
-        const markerFilterDropdown = document.getElementById('marker-filter-dropdown');
-    
-        if (window.innerWidth <= 767) {
-            const leftPanelTop = leftPanel.getBoundingClientRect().top;
-            mapStyle.style.top = `${leftPanelTop}px`;
-            markerFilterDropdown.style.top = `${leftPanelTop}px`;
-        } else {
-            mapStyle.style.top = '10px';
-            markerFilterDropdown.style.top = '9px';
-        }
-    }
-    
-    // 初期設定
-    updatePositions();
-    
-    // ウィンドウのリサイズ時に実行
-    window.addEventListener('resize', updatePositions);
+	// document.getElementById('add-geojson-layer-button').addEventListener('click', addGeoJsonLayer);
+	// document.getElementById('remove-geojson-layer-button').addEventListener('click', removeGeoJsonLayer);
 
-    // ボタンクリックイベントを登録
-    document.getElementById('language-toggle-button').addEventListener('click', () => {
-        const newLanguage = currentLanguage === 'japanese' ? 'english' : 'japanese';
-        setLanguage(newLanguage);
-    });
-    document.getElementById('add-geojson-layer-button').addEventListener('click', addGeoJsonLayer);
-    document.getElementById('remove-geojson-layer-button').addEventListener('click', removeGeoJsonLayer);
+	// 初期メッセージを設定
+	  document.getElementById('info').innerHTML = '言語の選択とアイコンをクリックまたはタップして詳細を表示';
+		const element = document.getElementById('info');
 
-    // 初期メッセージを設定
-      document.getElementById('info').innerHTML = '言語の選択とアイコンをクリックまたはタップして詳細を表示';
-        const element = document.getElementById('info');
+		// 要素の位置を少し下げる
+		element.style.marginTop = '20px';  // 20px 下げる
 
-        // 要素の位置を少し下げる
-        element.style.marginTop = '20px';  // 20px 下げる
+	// すべてのマーカーの平均緯度と経度を計算
+	let latSum = 0;
+	let lonSum = 0;
 
-    // すべてのマーカーの平均緯度と経度を計算
-    let latSum = 0;
-    let lonSum = 0;
-
-    
+	
 
 
 
 
-    // Mapboxのアクセストークン
-    mapboxgl.accessToken = 'pk.eyJ1IjoieW9oamFwYW4iLCJhIjoiY2xnYnRoOGVmMDFsbTNtbzR0eXV6a2IwZCJ9.kJYURwlqIx_cpXvi66N0uw';
+	// Mapboxのアクセストークン
+	// mapboxgl.accessToken = 'pk.eyJ1IjoieW9oamFwYW4iLCJhIjoiY2xnYnRoOGVmMDFsbTNtbzR0eXV6a2IwZCJ9.kJYURwlqIx_cpXvi66N0uw';
+	mapboxgl.accessToken = 'pk.eyJ1IjoieW9obWFuIiwiYSI6IkxuRThfNFkifQ.u2xRJMiChx914U7mOZMiZw';
 
-    // データを取得
-    let rows = data.main.values;
-    let markers = [];
-    initMap();
+	// データを取得
+	let rows = data.main.values;
+		let allRows = data.main.values; // 全データを保持
 
-    // filter rows based on marker-filter dropdown
-    const dropdown = document.getElementById('marker-filter');
-    dropdown.addEventListener('change', function() {
-        const category = parseInt(dropdown.value);
-        console.log(category);
-        if (category == -1) {
-            console.log('all');
-            rows = data.main.values;
-        } else {
-            console.log('filtered');
-            rows = data.main.values.filter(row => parseInt(row[1]) === category);
-        }
-        
-        initMap();
-    });
+	// 検索ボックスのイベントリスナーを追加
+	const markerSearch = document.getElementById('marker-search');
+	if (markerSearch) {
+		markerSearch.addEventListener('input', function(e) {
+			const keyword = e.target.value.trim().toLowerCase();
+			if (!keyword) {
+				rows = allRows;
+			} else {
+				rows = allRows.filter(row => {
+					const jName = (row[2] || '').toLowerCase();
+					const eName = (row[3] || '').toLowerCase();
+					return jName.includes(keyword) || eName.includes(keyword);
+				});
+			}
+			initMap(true); // 位置を維持して再描画
+		});
+	}
+	let markers = [];
+	initMap();
 
-    console.log(rows);
+	// filter rows based on marker-filter dropdown
+	// const dropdown = document.getElementById('marker-filter');
+	// dropdown.addEventListener('change', function() {
+	//     const category = parseInt(dropdown.value);
+	//     console.log(category);
+	//     if (category == -1) {
+	//         console.log('all');
+	//         rows = data.main.values;
+	//     } else {
+	//         console.log('filtered');
+	//         rows = data.main.values.filter(row => parseInt(row[1]) === category);
+	//     }
+		
+	//     initMap();
+	// });
 
-    // current marker idの変数
-    let currentMarkerId = null;
+	// current marker idの変数
+	let currentMarkerId = null;
 
-    function initMap() {
-        console.log('initMap');
-        console.log(rows)
-        // 既存のマーカーを削除
-        markers.forEach(marker => marker.remove());
-        markers = [];
-        // lat,lonがある行のみを対象にする
-        latSum = 0;
-        lonSum = 0;
-        rows.forEach((row, index) => {
-            
-            const [id, category, name, englishName, lat, lon, japaneseDescription, englishDescription, link, hashutagu, linkname,numphotos] = row;
-            if (!lat || !lon) return;
-            console.log(lat, lon);
-            if (lat && lon) { // lat, lonが存在する場合のみ加算
-                latSum += parseFloat(lat);
-                lonSum += parseFloat(lon);
-            }
-        });
+	function initMap(preservePosition = false) {
+		// Calculate initial center coordinates regardless of preservePosition
+		latSum = 0;
+		lonSum = 0;
+		let validPoints = 0;
 
-        // 中心座標を計算
-        const centerlat = latSum / rows.length;
-        const centerlon = lonSum / rows.length;
+		let bounds = new mapboxgl.LngLatBounds();
 
-        console.log(centerlat, centerlon);
+		rows.forEach(row => {
+			const [, , , , lat, lon] = row;
+			if (lat && lon) {
+			latSum += parseFloat(lat);
+			lonSum += parseFloat(lon);
+			validPoints++;
+			bounds.extend([parseFloat(lon), parseFloat(lat)]);
+			}
+		});
 
-        if (!map) { // mapが存在しない場合のみ初期化
-            map = new mapboxgl.Map({
-                container: 'map',
-                center: [centerlon, centerlat],
-                //style: 'mapbox://styles/mapbox/satellite-v9',
-                style: 'mapbox://styles/mapbox/streets-v11',
-                zoom: 15
-            });
-        } else {
-            map.setCenter([centerlon, centerlat]);
-        }
-        // document.getElementById('normal-map-btn').addEventListener('click', () => {
-        //     map.setStyle('mapbox://styles/mapbox/streets-v11');
-        // });
-        
-        // document.getElementById('satellite-map-btn').addEventListener('click', () => {
-        //     map.setStyle('mapbox://styles/mapbox/satellite-v9');
-        // });
+		// Default center coordinates if no valid points
+		let centerLat = 35.8309;  // Default latitude (Reitaku area)
+		let centerLon = 139.9534; // Default longitude (Reitaku area)
 
-        const mapDropdown = document.getElementById('map-style-dropdown');
-        mapDropdown.addEventListener('change', () => {
-            const year = mapDropdown.value;
-            let style;
+		if (validPoints > 0) {
+			centerLat = latSum / validPoints;
+			centerLon = lonSum / validPoints;
+		}
 
-            switch (year) {
-                case 'normal':
-                    style = 'mapbox://styles/mapbox/streets-v11';
-                    break;
-                case '2023':
-                    style = 'mapbox://styles/mapbox/satellite-v9';
-                    break;
+		// Get current view state if preserving position
+		const currentCenter = preservePosition && map ? map.getCenter() : null;
+		const currentZoom = preservePosition && map ? map.getZoom() : null;
 
-                case '1974':
-                    style = {
-                    "version": 8,
-                    "sources": {
-                        "gsi": {
-                        "type": "raster",
-                        "tiles": [
-                            "https://cyberjapandata.gsi.go.jp/xyz/gazo1/{z}/{x}/{y}.jpg"
-                        ],
-                        "tileSize": 256
-                        }
-                    },
-                    "layers": [
-                        {
-                        "id": "gsi-layer",
-                        "type": "raster",
-                        "source": "gsi",
-                        "minzoom": 0,
-                        "maxzoom": 18
-                        }
-                    ]
-                    };
-                    break;
-                case '1961':
-                    style = {
-                    "version": 8,
-                    "sources": {
-                        "gsi": {
-                        "type": "raster",
-                        "tiles": [
-                            "https://cyberjapandata.gsi.go.jp/xyz/ort_old10/{z}/{x}/{y}.png"
-                        ],
-                        "tileSize": 256
-                        }
-                    },
-                    "layers": [
-                        {
-                        "id": "gsi-layer",
-                        "type": "raster",
-                        "source": "gsi",
-                        "minzoom": 0,
-                        "maxzoom": 18
-                        }
-                    ]
-                    };
-                    break;
-                case '1979':
-                    style = {
-                    "version": 8,
-                    "sources": {
-                        "gsi": {
-                        "type": "raster",
-                        "tiles": [
-                            "https://cyberjapandata.gsi.go.jp/xyz/gazo2/{z}/{x}/{y}.jpg"
-                        ],
-                        "tileSize": 256
-                        }
-                    },
-                    "layers": [
-                        {
-                        "id": "gsi-layer",
-                        "type": "raster",
-                        "source": "gsi",
-                        "minzoom": 0,
-                        "maxzoom": 18
-                        }
-                    ]
-                    };
-                    break;
-                case '1984':
-                    style = {
-                    "version": 8,
-                    "sources": {
-                        "gsi": {
-                        "type": "raster",
-                        "tiles": [
-                            "https://cyberjapandata.gsi.go.jp/xyz/gazo3/{z}/{x}/{y}.jpg"
-                        ],
-                        "tileSize": 256
-                        }
-                    },
-                    "layers": [
-                        {
-                        "id": "gsi-layer",
-                        "type": "raster",
-                        "source": "gsi",
-                        "minzoom": 0,
-                        "maxzoom": 18
-                        }
-                    ]
-                    };
-                    break;
-                case '1987':
-                    style = {
-                    "version": 8,
-                    "sources": {
-                        "gsi": {
-                        "type": "raster",
-                        "tiles": [
-                            "https://cyberjapandata.gsi.go.jp/xyz/gazo4/{z}/{x}/{y}.jpg"
-                        ],
-                        "tileSize": 256
-                        }
-                    },
-                    "layers": [
-                        {
-                        "id": "gsi-layer",
-                        "type": "raster",
-                        "source": "gsi",
-                        "minzoom": 0,
-                        "maxzoom": 18
-                        }
-                    ]
-                    };
-                    break;
-                case '2008':
-                    style = {
-                    "version": 8,
-                    "sources": {
-                        "gsi": {
-                        "type": "raster",
-                        "tiles": [
-                            "https://maps.gsi.go.jp/xyz/nendophoto2008/{z}/{x}/{y}.png"
-                        ],
-                        "tileSize": 256
-                        }
-                    },
-                    "layers": [
-                        {
-                        "id": "gsi-layer",
-                        "type": "raster",
-                        "source": "gsi",
-                        "minzoom": 0,
-                        "maxzoom": 18
-                        }
-                    ]
-                    };
-                    break;
-                case '2012':
-                    style = {
-                    "version": 8,
-                    "sources": {
-                        "gsi": {
-                        "type": "raster",
-                        "tiles": [
-                            "https://maps.gsi.go.jp/xyz/nendophoto2012/{z}/{x}/{y}.png"
-                        ],
-                        "tileSize": 256
-                        }
-                    },
-                    "layers": [
-                        {
-                        "id": "gsi-layer",
-                        "type": "raster",
-                        "source": "gsi",
-                        "minzoom": 0,
-                        "maxzoom": 18
-                        }
-                    ]
-                    };
-                    break;
-                case '2014':
-                    style = {
-                    "version": 8,
-                    "sources": {
-                        "gsi": {
-                        "type": "raster",
-                        "tiles": [
-                            "https://maps.gsi.go.jp/xyz/nendophoto2014/{z}/{x}/{y}.png"
-                        ],
-                        "tileSize": 256
-                        }
-                    },
-                    "layers": [
-                        {
-                        "id": "gsi-layer",
-                        "type": "raster",
-                        "source": "gsi",
-                        "minzoom": 0,
-                        "maxzoom": 18
-                        }
-                    ]
-                    };
-                    break;
-                case '2019':
-                    style = {
-                    "version": 8,
-                    "sources": {
-                        "gsi": {
-                        "type": "raster",
-                        "tiles": [
-                            "https://maps.gsi.go.jp/xyz/nendophoto2019/{z}/{x}/{y}.png"
-                        ],
-                        "tileSize": 256
-                        }
-                    },
-                    "layers": [
-                        {
-                        "id": "gsi-layer",
-                        "type": "raster",
-                        "source": "gsi",
-                        "minzoom": 0,
-                        "maxzoom": 18
-                        }
-                    ]
-                    };
-                    break;
-                default:
-                    style = 'mapbox://styles/mapbox/streets-v11';
-            }
+		// Clear existing markers
+		markers.forEach(marker => marker.remove());
+		markers = [];
 
-            map.setStyle(style);
-        });
+		// Initialize or update map
+		if (!map) {
+			map = new mapboxgl.Map({
+			container: 'map',
+			style: 'mapbox://styles/yohman/cm658vxxv008x01st4ge57h58',			
+			center: [centerLon, centerLat],
+			// zoom: 15
+			});
+			if (validPoints > 0) {
+			map.fitBounds(bounds, { padding: 40 });
+			}
+		} else if (!preservePosition) {
+			map.setCenter([centerLon, centerLat]);
+			if (validPoints > 0) {
+			map.fitBounds(bounds, { padding: 40 });
+			}
+		}
 
-        
+		// Restore previous view if preserving position
+		if (preservePosition && currentCenter && currentZoom) {
+			map.setCenter(currentCenter);
+			map.setZoom(currentZoom);
+		}
 
-        // マーカーをマップに追加
-        rows.forEach((row, index) => {
-            const [id, category, jName, eName, lat, lon, jDescription, eDescription,link,hashutagu,linkname,numphotos] = row;
-            
-            var rphotos = ''; // Object to store dynamically created variables
+		const mapDropdown = document.getElementById('map-style-dropdown');
+		const mapStyles = {
+			'normal': 'mapbox://styles/mapbox/streets-v11',
+			'2023': 'mapbox://styles/mapbox/streets-v9',
+			'1974': 'gazo1',
+			'1961': 'ort_old10',
+			'1979': 'gazo2',
+			'1984': 'gazo3',
+			'1987': 'gazo4',
+			'2008': 'nendophoto2008',
+			'2012': 'nendophoto2012',
+			'2014': 'nendophoto2014',
+			'2019': 'nendophoto2019'
+		};
 
-            for (let i = 1; i <= numphotos; i++) {
-                rphotos+=`<div class="mySlides fade"><img src="images/reitaku-${id}-${i}.jpg" style="width:100%;height:350px;object-fit:cover"></div> `;
-            }
+		mapDropdown.addEventListener('change', () => {
+			const year = mapDropdown.value;
+			let style = mapStyles[year];
 
-            // console.log(rphotos);
-            // カスタムマーカー用のHTML要素を作成
-            const customMarker = document.createElement('div');
-            if (category == 4) {
-                customMarker.style.backgroundImage = `url(images/reitaku-ex-1.jpg)`;
-                customMarker.style.width = '25px';
-                customMarker.style.height = '25px';
-                customMarker.style.zIndex = index;
-                customMarker.style.borderRadius = '50%';
-            } 
-            else if (category == 5){
-                customMarker.style.backgroundImage = `url(images/reitaku-ex-2.jpg)`;
-                customMarker.style.width = '25px';
-                customMarker.style.height = '25px';
-                customMarker.style.zIndex = index;
-                customMarker.style.borderRadius = '0%';
-            }
-            else if (category == 0) {
-                customMarker.style.backgroundImage = `url(images/reitaku-${id}-1.jpg)`;
-                customMarker.style.width = '40px';
-                customMarker.style.height = '40px';
-                customMarker.style.zIndex = '1000';
-                customMarker.style.borderRadius = '50%';
-            }
-            else {
-                customMarker.style.backgroundImage = `url(images/reitaku-${id}-1.jpg)`;
-                customMarker.style.width = '40px';
-                customMarker.style.height = '40px';
-                customMarker.style.zIndex = index;
-                customMarker.style.borderRadius = '50%';
-            }
-            // customMarker.style.backgroundImage = `url(images/reitaku-${id}-1.jpg)`;
-            // customMarker.style.borderRadius = '50%';
-            // customMarker.style.border = `2px solid ${getCategoryColor(category)}`;
-            customMarker.style.backgroundSize = 'cover';
-            customMarker.style.cursor = 'pointer';
-            customMarker.style.border = `2px solid white`;
-            customMarker.style.border = `0 0 0 2px white, 0 0 0 4px white`;
+			if (year === 'normal' || year === '2023') {
+			map.setStyle(style);
+			} else {
+			map.setStyle({
+				version: 8,
+				sources: {
+				gsi: {
+					type: 'raster',
+					tiles: [mapboxgl.styleURL(style)],
+					tileSize: 256
+				}
+				},
+				layers: [{
+				id: 'gsi-layer',
+				type: 'raster',
+				source: 'gsi',
+				minzoom: 0,
+				maxzoom: 18
+				}]
+			});
+			}
+		});
 
-            // マーカーをマップに追加
-            const marker = new mapboxgl.Marker({ element: customMarker })
-                .setLngLat([parseFloat(lon), parseFloat(lat)])
-                .addTo(map);
+		
 
-            markers.push(marker);
-            // Add hover title tooltip
-            customMarker.title = currentLanguage === 'japanese' ? jName : eName;
+		// マーカーをマップに追加
+		rows.forEach((row, index) => {
+			const [id, category, jName, eName, lat, lon, jDescription, eDescription, link, hashutagu, linkname, numphotos] = row;
+			
+			const rphotos = Array.from({length: numphotos}, (_, i) => 
+				`<div class="mySlides fade"><img src="images/reitaku-${id}-${i + 1}.jpg" style="width:100%;height:350px;object-fit:cover"></div>`
+			).join('');
 
-            // クリックイベントで左パネルをトグル表示
-            marker.getElement().addEventListener('click', () => {
-                
-                // consoleでmarkerのidを表示
-                console.log(id);
-                
-                //currentMarkerIdにidを代入
-                currentMarkerId = id;
+			const markerConfig = {
+				4: { image: 'reitaku-ex-1.jpg', size: '25px', radius: '50%' },
+				5: { image: 'reitaku-ex-2.jpg', size: '25px', radius: '0%' },
+				0: { image: `reitaku-${id}-1.jpg`, size: '40px', radius: '50%', zIndex: '1000' }
+			};
 
-                if (lastClickedMarker === marker) {
-                    document.getElementById('info').innerHTML = '言語を選択とマーカーをクリックまたはタップして詳細を表示';
-                    lastClickedMarker = null;
-                } else {
-                    const description = currentLanguage === 'japanese' ? jDescription : eDescription;
-                    const name = currentLanguage === 'japanese' ? jName : eName;
-                    document.getElementById('info').innerHTML = `
-                        <h2>${name}</h2>
-                        <p>${description}</p>
-                        <div class="slideshow-container">
-                            ${rphotos}
-                            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-                            <a class="next" onclick="plusSlides(1)">&#10095;</a>
-                        </div>
-                        <a href="${link}" target="_blank">${linkname}</a>
-                    `;
-                    lastClickedMarker = marker;
-                }
-            });
-        });
+			const customMarker = document.createElement('div');
+			const config = markerConfig[category] || { 
+				image: `reitaku-${id}-1.jpg`, 
+				size: '40px', 
+				radius: '50%',
+				zIndex: index
+			};
 
-        
-    }
-    // create a function that regenerates the left panel based on the current marker id
-    function regenerateLeftPanel() {
-        // find the row that matches the current marker id
-        const row = rows.find(row => row[0] === currentMarkerId);
-        if (!row) return; // if no row is found, exit the function
+			Object.assign(customMarker.style, {
+				backgroundImage: `url(images/${config.image})`,
+				width: config.size,
+				height: config.size,
+				zIndex: config.zIndex || index,
+				borderRadius: config.radius,
+				backgroundSize: 'cover',
+				cursor: 'pointer',
+				border: '2px solid white',
+				boxShadow: '0 2px 4px rgba(0,0,0,0.3)'
+			});
 
-        const [id, category, jName, eName, lat, lon, jDescription, eDescription,link,hashutagu,linkname,numphotos] = row;
-        var rphotos = ''; // Object to store dynamically created variables
+			const marker = new mapboxgl.Marker({ element: customMarker })
+				.setLngLat([parseFloat(lon), parseFloat(lat)])
+				.addTo(map);
 
-        for (let i = 1; i <= numphotos; i++) {
-            rphotos+=`<div class="mySlides fade"><img src="images/reitaku-${id}-${i}.jpg" style="width:100%;height:350px;object-fit:cover"></div> `;
-        }
+			markers.push(marker);
+			customMarker.title = currentLanguage === 'japanese' ? jName : eName;
 
-        const description = currentLanguage === 'japanese' ? jDescription : eDescription;
-        const name = currentLanguage === 'japanese' ? jName : eName;
-        document.getElementById('info').innerHTML = `
-            <h2>${name}</h2>
-            <p>${description}</p>
-            <div class="slideshow-container">
-                ${rphotos}
-                <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-                <a class="next" onclick="plusSlides(1)">&#10095;</a>
-            </div>
-            <a href="${link}" target="_blank">${linkname}</a>
-        `;
-    }
+			marker.getElement().addEventListener('click', () => {
+				// If same marker is clicked again, do nothing
+				if (lastClickedMarker === marker) {
+					document.getElementById('info').innerHTML = 'マーカーをクリックまたはタップして詳細を表示';
+					lastClickedMarker = null;
+				} else {
+					const arrows = numphotos > 1 ? `
+						<a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+						<a class="next" onclick="plusSlides(1)">&#10095;</a>
+					` : '';
+					
+					document.getElementById('info').innerHTML = `
+						<h2>${currentLanguage === 'japanese' ? jName : eName}</h2>
+						<p>${currentLanguage === 'japanese' ? jDescription : eDescription}</p>
+						<a href="${link}" target="_blank">${linkname}</a>
+						<div class="slideshow-container">
+							${rphotos}
+							${arrows}
+						</div>
+					`;
+					lastClickedMarker = marker;
+					showSlides(1);  // Reset to first slide when marker is clicked
+				}
 
-    // 初期設定
-    initMap();
+				currentMarkerId = id;
+				const leftPanel = document.getElementById('left-panel');
+				const rightPanel = document.getElementById('right-panel');
+				const mapElement = document.getElementById('map');
+				
+				// Reset slide index when new marker is clicked
+				slideIndex = 1;
+				
+				// Remove closed class to show panel
+				leftPanel.classList.remove('closed');
+				document.body.classList.add('panel-open');
+				
+				// Adjust map height for mobile
+				if (window.innerWidth <= 767) {
+					setTimeout(() => {
+						map.resize();
+					}, 300);
+				}
+				
+				const arrows = numphotos > 1 ? `
+					<a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+					<a class="next" onclick="plusSlides(1)">&#10095;</a>
+				` : '';
+				
+				document.getElementById('info').innerHTML = `
+					<h2>${currentLanguage === 'japanese' ? jName : eName}</h2>
+					<p>${currentLanguage === 'japanese' ? jDescription : eDescription}</p>
+					<a href="${link}" target="_blank">${linkname}</a>
+					<div class="slideshow-container">
+						${rphotos}
+						${arrows}
+					</div>
+				`;
+				lastClickedMarker = marker;
+				showSlides(1);  // Reset to first slide when marker is clicked
+			});
+		});
 
-    // filter rows based on marker-filter dropdown
-    const markerFilterDropdown = document.getElementById('marker-filter');
-    markerFilterDropdown.addEventListener('change', function() {
-        const category = parseInt(markerFilterDropdown.value);
-        console.log(category);
-        if (category == -1) {
-            console.log('all');
-            rows = data.main.values;
-        } else {
-            console.log('filtered');
-            rows = data.main.values.filter(row => parseInt(row[1]) === category);
-        }
-        
-        initMap();
-    });
+		
+	}
+	// create a function that regenerates the left panel based on the current marker id
+	function regenerateLeftPanel() {
+		// find the row that matches the current marker id
+		const row = rows.find(row => row[0] === currentMarkerId);
+		if (!row) return; // if no row is found, exit the function
+
+		const [id, category, jName, eName, lat, lon, jDescription, eDescription,link,hashutagu,linkname,numphotos] = row;
+		var rphotos = ''; // Object to store dynamically created variables
+
+		for (let i = 1; i <= numphotos; i++) {
+			rphotos+=`<div class="mySlides fade"><img src="images/reitaku-${id}-${i}.jpg" style="width:100%;height:350px;object-fit:cover"></div> `;
+		}
+
+		const arrows = numphotos > 1 ? `
+			<a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+			<a class="next" onclick="plusSlides(1)">&#10095;</a>
+		` : '';
+
+		const description = currentLanguage === 'japanese' ? jDescription : eDescription;
+		const name = currentLanguage === 'japanese' ? jName : eName;
+		document.getElementById('info').innerHTML = `
+			<h2>${name}</h2>
+			<p>${description}</p>
+			<a href="${link}" target="_blank">${linkname}</a>
+			<div class="slideshow-container">
+				${rphotos}
+				${arrows}
+			</div>
+			
+		`;
+		showSlides(1);  // Reset to first slide when panel is regenerated
+	}
+
+	// 初期設定
+	// initMap();
+
+	// filter rows based on marker-filter dropdown
+	const markerFilterDropdown = document.getElementById('marker-filter');
+	// markerFilterDropdown.addEventListener('change', function() {
+	//     const category = parseInt(markerFilterDropdown.value);
+	//     console.log(category);
+	//     if (category == -1) {
+	//         console.log('all');
+	//         rows = data.main.values;
+	//     } else {
+	//         console.log('filtered');
+	//         rows = data.main.values.filter(row => parseInt(row[1]) === category);
+	//     }
+		
+	//     initMap();
+	// });
+
+	// Replace the 3D button event listeners with this:
+	document.getElementById('threeDToggle').addEventListener('change', function(e) {
+		if (e.target.checked) {
+			addGeoJsonLayer();
+		} else {
+			removeGeoJsonLayer();
+		}
+	});
+
+	// Replace dropdown event listener with checkbox handler
+	const markerFilter = document.getElementById('marker-filter');
+	markerFilter.addEventListener('change', function(e) {
+		console.log('Checkbox changed');
+		if (!e.target.matches('input[type="checkbox"]')) return;
+		
+		// Get all checked categories
+		const checkedCategories = Array.from(markerFilter.querySelectorAll('input[type="checkbox"]:checked'))
+			.map(checkbox => parseInt(checkbox.value));
+		
+		// Filter rows to show only checked categories
+		rows = data.main.values.filter(row => checkedCategories.includes(parseInt(row[1])));
+		
+		initMap(true); // Pass true to preserve position
+	});
+
+	// Add check all/uncheck all functionality
+	document.getElementById('check-all').addEventListener('click', (e) => {
+		e.preventDefault();
+		markerFilter.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+			checkbox.checked = true;
+		});
+		// Update the markers
+		rows = data.main.values;
+		initMap(true);
+	});
+
+	document.getElementById('uncheck-all').addEventListener('click', (e) => {
+		e.preventDefault();
+		markerFilter.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+			checkbox.checked = false;
+		});
+		// Clear all markers
+		rows = [];
+		initMap(true);
+	});
+
+	// Add panel toggle functionality
+	const leftPanel = document.getElementById('left-panel');
+	const panelHandle = document.getElementById('panel-handle');
+
+	panelHandle.addEventListener('click', () => {
+		leftPanel.classList.toggle('closed');
+		document.body.classList.toggle('panel-open');
+		
+		if (window.innerWidth <= 767) {
+			setTimeout(() => {
+				map.resize();
+			}, 300);
+		}
+	});
+
+	// Add tools panel toggle functionality
+	const toolsToggle = document.getElementById('tools-toggle');
+	const mapTools = document.getElementById('map-tools');
+	
+	toolsToggle.addEventListener('click', () => {
+		const isVisible = mapTools.classList.contains('visible');
+		mapTools.classList.toggle('visible');
+		toolsToggle.textContent = currentLanguage === 'japanese' 
+			? (isVisible ? '地図オプションを表示' : '地図オプションを非表示')
+			: (isVisible ? 'Show map options' : 'Hide map options');
+	});
 
 }
 
-// カテゴリごとに色を取得するヘルパー関数
-// function getCategoryColor(category) {
-//     switch (parseInt(category)) {
-//         case 0: return '#FFFF33'; // 黄色系
-//         case 1: return '#33FF57'; // 緑系
-//         case 2: return '#3357FF'; // 青系
-//         case 3: return '#FF33FF'; // ピンク系
-//         case 4: return '#FF5733'; // オレンジ系
-//         case 5: return '#33FFFF'; // シアン系
-//         default: return '#ffffff'; // 白系
-//     }
-// }
-
+// Keep these functions outside init() as they're used globally
 function addGeoJsonLayer() {
-    map.addSource('geojson-data', {
-        type: 'geojson',
-        data: 'data/map.geojson'
-    });
+	map.addSource('geojson-data', {
+		type: 'geojson',
+		data: 'data/map.geojson'
+	});
 
-    map.easeTo({
-        pitch: 60, // 地図の傾斜角度を設定
-        bearing: -17.6, // 地図の回転角度を設定
-        duration: 1000 // アニメーションの持続時間を設定
-    });
+	map.easeTo({
+		pitch: 50, // 地図の傾斜角度を設定
+		bearing: -10, // 地図の回転角度を設定
+		duration: 1000 // アニメーションの持続時間を設定
+	});
 
-    map.addLayer({
-        id: 'geojson-layer',
-        type: 'fill-extrusion',
-        source: 'geojson-data',
-        paint: {
-            'fill-extrusion-color': '#007cbf',
-            'fill-extrusion-height': ['get', 'height'],
-            'fill-extrusion-base': 0,
-            'fill-extrusion-opacity': 0.6
-        }
-    });
+	map.addLayer({
+		id: 'geojson-layer',
+		type: 'fill-extrusion',
+		source: 'geojson-data',
+		paint: {
+			'fill-extrusion-color': '#204e00', // replaced #204e00
+			'fill-extrusion-height': ['get', 'height'],
+			'fill-extrusion-base': 0,
+			'fill-extrusion-opacity': 0.8
+		}
+	});
 }
 
 function removeGeoJsonLayer() {
-    map.removeLayer('geojson-layer');
-    map.removeSource('geojson-data');
+	map.removeLayer('geojson-layer');
+	map.removeSource('geojson-data');
+	
+	// Restore map to flat view
+	map.easeTo({
+		pitch: 0,
+		bearing: 0,
+		duration: 1000
+	});
 }

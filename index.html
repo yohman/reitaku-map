@@ -1,47 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Interactive Map with Mapbox and Google Sheets Data</title>
-  <link href="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.css" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>The NEW Reitaku Campus Web Map</title>
+	<link href="https://api.mapbox.com/mapbox-gl-js/v3.9.0/mapbox-gl.css" rel="stylesheet">
+	<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="left-panel">
-    <div id="info">Hover over a marker for details</div>
-  </div>
-  <div id="right-panel">
-    <div id="map"></div>
-  </div>
-  <div id="map-style">
-    <select id="map-style-dropdown">
-      <option value="normal">Normal Map</option>
-      <option value="2023">2023 </option>
-      <option value="2019">2019 </option>
-      <option value="2014">2014 </option>
-      <option value="2012">2012 </option>
-      <option value="2008">2008 </option>
-      <option value="1987">1987 </option>
-      <option value="1984">1984 </option>
-      <option value="1979">1979 </option>
-      <option value="1974">1974 </option>
-      <option value="1961">1961 </option>
-    </select>
-  </div>
-  <button id="marker-filter-dropdown">
-    <select id="marker-filter">
-        <option value="-1">All</option>
-        <option value="0">university</option>
-        <option value="1">middle & high school</option>
-        <option value="2">sports facility</option>
-        <option value="3">others</option>
-        <option value="4">AED</option>
-        <option value="5">barrier-free toilet</option>
-    </select>
-  </button>
-  <script src="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.js"></script>
-  <script src="map.js"></script>
-  <script src="getdata.js"></script>
+	<!-- Add logo here -->
+	<img src="https://www.reitaku-u.ac.jp/_assets/images/logo.svg" alt="Reitaku University Logo" id="reitaku-logo">
+	<div id="left-panel" class="closed">
+		<div id="panel-handle">
+			<span class="handle-icon">›</span>
+		</div>
+		<div id="info">Hover over a marker for details</div>
+	</div>
+	<div id="right-panel">
+		<div id="map">
+			<input type="text" id="marker-search" placeholder="施設名で検索">
+			<button id="tools-toggle" class="tools-toggle" data-ja="地図オプションを表示" data-en="Show map options">地図オプションを表示</button>
+			<div id="map-tools">
+				<div class="control-group">
+					<label class="control-label" data-ja="タイムマシン" data-en="Time Machine">タイムマシン</label>
+					<select id="map-style-dropdown" class="map-control">
+						<option value="normal" data-ja="標準地図" data-en="Normal Map">標準地図</option>
+						<option value="2023" data-ja="現在" data-en="Present">現在</option>
+						<option value="2019">2019</option>
+						<option value="2014">2014</option>
+						<option value="2012">2012</option>
+						<option value="2008">2008</option>
+						<option value="1987">1987</option>
+						<option value="1984">1984</option>
+						<option value="1979">1979</option>
+						<option value="1974">1974</option>
+						<option value="1961">1961</option>
+					</select>
+				</div>
+				<div class="control-group">
+					<div class="control-header">
+						<label class="control-label" data-ja="表示" data-en="Show">表示</label>
+						<div class="control-actions">
+							<a href="#" class="control-link" id="check-all" data-ja="すべて表示" data-en="Show all">すべて表示</a>
+							<span class="control-separator">|</span>
+							<a href="#" class="control-link" id="uncheck-all" data-ja="すべて非表示" data-en="Hide all">すべて非表示</a>
+						</div>
+					</div>
+					<div id="marker-filter" class="checkbox-group">
+						<label class="checkbox-label">
+							<input type="checkbox" value="0" checked>
+							<span class="checkbox-text" data-ja="大学" data-en="University">大学</span>
+						</label>
+						<label class="checkbox-label">
+							<input type="checkbox" value="1" checked>
+							<span class="checkbox-text" data-ja="中学・高校" data-en="Middle & High School">中学・高校</span>
+						</label>
+						<label class="checkbox-label">
+							<input type="checkbox" value="2" checked>
+							<span class="checkbox-text" data-ja="スポーツ施設" data-en="Sports Facility">スポーツ施設</span>
+						</label>
+						<label class="checkbox-label">
+							<input type="checkbox" value="3" checked>
+							<span class="checkbox-text" data-ja="その他" data-en="Others">その他</span>
+						</label>
+						<label class="checkbox-label">
+							<input type="checkbox" value="4" checked>
+							<span class="checkbox-text" data-ja="AED" data-en="AED">AED</span>
+						</label>
+						<label class="checkbox-label">
+							<input type="checkbox" value="5" checked>
+							<span class="checkbox-text" data-ja="多目的トイレ" data-en="Barrier-free Toilet">多目的トイレ</span>
+						</label>
+					</div>
+				</div>
+				<div class="control-row">
+					<label class="switch-3d">
+						<input type="checkbox" id="threeDToggle">
+						<span class="slider "></span>
+						<span class="switch-label">3D</span>
+					</label>
+
+						<label class="switch-lang" style="float: right;">
+						<input type="checkbox" id="languageToggle">
+						<span class="slider lang-slider">
+							<span class="lang-option ja">JA</span>
+							<span class="lang-option en">EN</span>
+						</span>
+						</label>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="https://api.mapbox.com/mapbox-gl-js/v3.9.0/mapbox-gl.js"></script>
+	<script src="map.js"></script>
+	<script src="getdata.js"></script>
 </body>
 </html>
