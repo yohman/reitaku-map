@@ -184,6 +184,24 @@
     .prev:hover, .next:hover {
         background-color: rgba(0,0,0,0.8);
     }
+    #marker-search {
+        padding: 8px 12px;
+        border: 1px solid #aaa;
+        border-radius: 6px;
+        margin-bottom: 12px;
+        box-sizing: border-box;
+        outline: none;
+        transition: border 0.2s;
+        margin: 10px 0; 
+        width: 130px;
+        height:30px;
+        position: absolute;
+        z-index: 9999;
+        right: 170px;
+        top:6px;
+        font-size: 13px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
 }
 
 /* =========================
@@ -691,4 +709,14 @@ input:checked + .lang-slider .ja,
     height: auto;
     z-index: 10000;
     filter: drop-shadow(0 0 2px white);
+}
+#marker-search {
+    color: rgb(255, 255, 255) !important;
+    background: #296460;
+}
+#marker-search:focus {
+    border: 1.5px solid #ffffff00;
+}
+#marker-search::placeholder {
+    color:#ffffff;
 }

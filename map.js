@@ -101,6 +101,25 @@ function init() {
 
 	// データを取得
 	let rows = data.main.values;
+		let allRows = data.main.values; // 全データを保持
+
+	// 検索ボックスのイベントリスナーを追加
+	const markerSearch = document.getElementById('marker-search');
+	if (markerSearch) {
+		markerSearch.addEventListener('input', function(e) {
+			const keyword = e.target.value.trim().toLowerCase();
+			if (!keyword) {
+				rows = allRows;
+			} else {
+				rows = allRows.filter(row => {
+					const jName = (row[2] || '').toLowerCase();
+					const eName = (row[3] || '').toLowerCase();
+					return jName.includes(keyword) || eName.includes(keyword);
+				});
+			}
+			initMap(true); // 位置を維持して再描画
+		});
+	}
 	let markers = [];
 	initMap();
 
